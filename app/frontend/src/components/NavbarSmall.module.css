@@ -1,0 +1,23 @@
+.navBar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 1.25rem 3rem;
+  font-weight: 700;
+}
+
+.navBar a {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.95;
+  letter-spacing: 2px;
+  font-size: 24px;
+  font-weight: 400;
+  transition: scale 0.5s ease;
+}
+
+.navBar a:hover {
+  scale: 1.1;
+}

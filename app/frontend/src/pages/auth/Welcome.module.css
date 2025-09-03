@@ -1,0 +1,146 @@
+.pageContainer {
+  position: relative;
+  min-height: 100vh;
+  background: var(--green-700);
+  font-family: "Barlow Condensed", sans-serif;
+}
+
+.curvedCut {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 62vw;
+  height: 100%;
+  background: var(--black-800);
+  clip-path: ellipse(80% 110% at 0% 50%);
+  z-index: 1;
+  pointer-events: none;
+  rotate: 180deg;
+}
+
+.navBar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 1.25rem 3rem;
+  font-weight: 700;
+}
+
+.navBar a {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.95;
+  letter-spacing: 2px;
+  font-size: 24px;
+  font-weight: 400;
+  transition: font-size 0.5s ease;
+}
+
+.navBar a:hover {
+  font-size: 26px;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 80%;
+  margin: 0 clamp(10rem, 10vw, 12rem);
+  min-height: calc(100vh - 84px);
+}
+
+.heroCopy h1 {
+  font-size: clamp(4.5rem, 10vw, 12rem);
+  line-height: 0.92;
+  margin: 0 0 0.5rem;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.heroCopy h3 {
+  margin: 0 0 1rem;
+  color: #e8f5e9;
+  font-size: clamp(1.6rem, 2.2vw, 2.6rem);
+  font-weight: 800;
+}
+.heroCopy p {
+  max-width: 60ch;
+  color: #f1f1f1;
+  opacity: 0.95;
+  margin: 0 0 1.5rem;
+  font-weight: 300;
+  font-size: clamp(1.1rem, 1.3rem, 1.5rem);
+}
+.heroCopy button {
+  background: var(--black-800);
+  color: #fff;
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
+  border: none;
+  padding: 0.95rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  transition: transform 0.35s ease, background 0.2s ease;
+}
+.heroCopy button:hover {
+  background: var(--black-700);
+  transform: translateY(-4px);
+}
+
+.heroImage {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 380px;
+}
+
+.heroImage img {
+  position: relative;
+  z-index: 1;
+  width: clamp(240px, 30vw, 480px);
+  transform: rotate(10deg);
+  height: auto;
+}
+
+@media (max-width: 1100px) {
+  .curvedCut {
+    width: 60vw;
+  }
+  .content {
+    gap: 2.5rem;
+  }
+
+  .heroImage img {
+    width: min(350px, 65vw);
+  }
+}
+
+@media (max-width: 900px) {
+  .content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    min-height: unset;
+  }
+  .heroImage {
+    order: -1;
+    align-self: center;
+  }
+  .curvedCut {
+    width: 60vw;
+    opacity: 0.96;
+  }
+  .heroImage img {
+    width: min(250px, 80vw);
+  }
+
+  .heroCopy button {
+    font-size: 14px;
+  }
+}

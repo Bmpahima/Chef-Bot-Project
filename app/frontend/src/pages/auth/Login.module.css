@@ -1,0 +1,205 @@
+.pageContainer {
+  position: relative;
+  min-height: 100vh;
+  background: var(--green-700);
+  font-family: "Barlow Condensed", sans-serif;
+}
+
+.curvedCut {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 62vw;
+  height: 100%;
+  background: var(--black-800);
+  clip-path: ellipse(80% 110% at 0% 50%);
+  z-index: 1;
+  pointer-events: none;
+  rotate: 180deg;
+}
+
+.navBar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 1.25rem 3rem;
+  font-weight: 700;
+}
+
+.navBar a {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.95;
+  letter-spacing: 2px;
+  font-size: 24px;
+  font-weight: 400;
+  transition: font-size 0.5s ease;
+}
+
+.navBar a:hover {
+  font-size: 26px;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 80%;
+  margin: 0 clamp(10rem, 10vw, 12rem);
+  min-height: calc(100vh - 84px);
+}
+
+.loginForm {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: min(600px, 45vw);
+}
+
+.loginForm h3 {
+  font-weight: 600;
+  letter-spacing: 2px;
+  font-size: clamp(50px, 20vw, 70px);
+  margin-bottom: clamp(1.6rem, 4vh, 3rem);
+  color: #fff;
+}
+
+.loginForm form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  width: 90%;
+}
+
+.loginForm__input {
+  position: relative;
+  width: 85%;
+}
+
+.loginForm__input input {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid #fff;
+  background: transparent;
+  padding: 1.2rem 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.loginForm__input input:focus {
+  outline: none;
+  border-color: var(--green-300);
+}
+
+.loginForm__input label {
+  position: absolute;
+  left: 0;
+  top: 1.1rem;
+  font-size: 24px;
+  color: #fff;
+  pointer-events: none;
+  transition: 0.3s ease all;
+  font-weight: 300;
+}
+
+.loginForm__input input:focus + label,
+.loginForm__input input:not(:placeholder-shown) + label {
+  top: -0.5rem;
+  font-size: 20px;
+  color: var(--green-300);
+}
+
+.loginForm button {
+  background: var(--black-800);
+  color: #fff;
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
+  border: none;
+  padding: 0.95rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  width: 40%;
+  transition: transform 0.35s ease, background 0.2s ease;
+}
+
+.loginForm button:hover {
+  background: var(--black-700);
+  transform: translateY(-4px);
+}
+
+.loginForm p {
+  color: #fff;
+  font-weight: 300;
+  font-size: 18px;
+  margin-top: 14px;
+}
+
+.loginForm p a {
+  color: #fff;
+}
+
+.loginForm p a:hover {
+  color: var(--black-900);
+}
+
+.heroImage {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 380px;
+}
+
+.heroImage img {
+  position: relative;
+  z-index: 1;
+  width: clamp(240px, 30vw, 480px);
+  transform: rotate(10deg);
+  height: auto;
+}
+
+@media (max-width: 1100px) {
+  .curvedCut {
+    width: 60vw;
+  }
+  .content {
+    gap: 2.5rem;
+  }
+  .heroImage::before {
+    width: min(560px, 60vw);
+  }
+  .heroImage img {
+    width: min(350px, 65vw);
+  }
+}
+
+@media (max-width: 900px) {
+  .content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    min-height: unset;
+  }
+  .heroImage {
+    order: -1;
+    align-self: center;
+  }
+  .curvedCut {
+    width: 60vw;
+    opacity: 0.96;
+  }
+  .heroImage::before {
+    width: min(420px, 75vw);
+  }
+  .heroImage img {
+    width: min(250px, 80vw);
+  }
+}
