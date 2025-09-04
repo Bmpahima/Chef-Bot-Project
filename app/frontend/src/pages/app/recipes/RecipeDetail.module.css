@@ -1,0 +1,257 @@
+.pageContainer {
+  position: relative;
+  min-height: 100vh;
+  background: var(--black-900);
+  color: #fff;
+  font-family: "Barlow Condensed", sans-serif;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px clamp(16px, 4vw, 32px) 64px;
+  position: relative;
+}
+
+.header {
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+}
+
+.title h1 {
+  font-size: clamp(3.2rem, 6vw, 4.8rem);
+  font-weight: 600;
+  line-height: 0.95;
+  margin: 0 0 8px;
+}
+
+.recipeImage {
+  height: 95px;
+  width: 95px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--green-400), var(--green-700));
+  border: 1px solid var(--gray-700);
+  margin-left: 36px;
+}
+
+.badgesContainer {
+  display: flex;
+  gap: clamp(8px, 12px, 16px);
+  align-items: center;
+  margin: 24px 0 16px;
+  flex-wrap: wrap;
+}
+
+.badgesContainer span {
+  padding: 8px 12px;
+  font-size: 24px;
+  background: var(--green-950);
+  border: 1px solid var(--green-900);
+  border-radius: 8px;
+  font-weight: 400;
+}
+
+.prepInfoContainer {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prepInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.prepInfo p {
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.prepInfo span {
+  font-size: 56px;
+  font-weight: 600;
+}
+
+.confOptionsContainer {
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.confOptionsContainer button {
+  min-width: 96px;
+  padding: 10px 0;
+  font-size: 24px;
+  font-weight: 300;
+  background: linear-gradient(180deg, var(--green-900) 10%, var(--green-950));
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.confOptionsContainer button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+}
+
+.instructionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.ingredientsContainer,
+.instructionsContainer {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 24px 32px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  margin: 0 0 20px;
+}
+
+.ingredientsContainer h2,
+.instructionsContainer h2 {
+  margin: 0 0 10px;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.ingredientsContainer ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.ingredientsContainer ul li,
+.instructionsContainer p {
+  color: var(--gray-400);
+  font-size: 28px;
+  font-weight: 300;
+}
+
+.creditsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.creationDates {
+  width: 220px;
+}
+
+.creation,
+.updation {
+  display: flex;
+  justify-content: space-between;
+}
+
+.creation p:nth-child(1),
+.updation p:nth-child(1) {
+  font-weight: 500;
+}
+
+.authorDetailContainer {
+  display: flex;
+  align-items: center;
+}
+
+.authorDetails {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  gap: 0.6rem;
+}
+
+.authorDetails p {
+  font-size: 24px;
+  color: #fff;
+}
+
+.authorDetails strong {
+  font-size: 36px;
+  color: #fff;
+}
+
+.authorImg {
+  height: 75px;
+  width: 75px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--green-400), var(--green-700));
+  border: 1px solid var(--gray-700);
+  margin-left: 24px;
+}
+
+@media (max-width: 1100px) {
+  .recipeImage {
+    height: 80px;
+    width: 80px;
+  }
+}
+
+@media (max-width: 720px) {
+  .badgesContainer span {
+    font-size: 20px;
+  }
+  .instructionGrid {
+    grid-template-columns: 1fr;
+    margin-bottom: 20px;
+  }
+
+  .recipeImage {
+    height: 65px;
+    width: 65px;
+  }
+
+  .confOptionsContainer button {
+    padding: 6px 0;
+    font-size: 20px;
+    min-width: 72px;
+  }
+
+  .ingredientsContainer ul li,
+  .instructionsContainer p {
+    font-size: 24px;
+  }
+
+  .ingredientsContainer h2,
+  .instructionsContainer h2 {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .prepInfo p {
+    font-size: 24px;
+  }
+
+  .prepInfo span {
+    font-size: 40px;
+  }
+
+  .authorDetails p {
+    font-size: 20px;
+  }
+
+  .authorDetails strong {
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  .authorImg {
+    height: 50px;
+    width: 50px;
+    margin-left: 18px;
+  }
+}

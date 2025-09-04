@@ -3,6 +3,10 @@ import Welcome from "./auth/Welcome.js";
 import Login from "./auth/Login.js";
 import Signup from "./auth/Signup.js";
 import Dashboard from "./app/Dashboard.js";
+import RecipesPage from "./app/recipes/RecipesPage.js";
+import RecipeDetail from "./app/recipes/RecipeDetail.js";
+import RecipeGenerator from "./app/generateRecipe/RecipeGenerator.js";
+import Profile from "./settings/Profile.js";
 
 const router = createBrowserRouter([
   {
@@ -25,13 +29,13 @@ const router = createBrowserRouter([
         path: "recipes",
         element: null,
         children: [
-          { path: "all", element: null },
-          { path: ":id", element: null },
+          { path: "all", element: <RecipesPage /> },
+          { path: ":id", element: <RecipeDetail /> },
         ],
       },
       {
         path: "create",
-        element: null,
+        element: <RecipeGenerator />,
         children: [
           { path: "upload", element: null },
           { path: "review", element: null },
@@ -39,6 +43,10 @@ const router = createBrowserRouter([
           { path: "generate", element: null },
           { path: "publish", element: null },
         ],
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
     ],
   },

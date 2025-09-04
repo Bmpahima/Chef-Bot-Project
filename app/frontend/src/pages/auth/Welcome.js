@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./Welcome.module.css";
 import BurgerImg from "../../assets/images/welcomeImg.png";
-import NavbarSmall from "../../components/NavbarSmall";
+import NavbarSmall from "../../components/layout/NavbarSmall.js";
 
 export default function Welcome() {
   const navigate = useNavigate();

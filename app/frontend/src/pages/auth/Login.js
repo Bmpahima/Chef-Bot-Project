@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import styles from "./Login.module.css";
 import BurgerImg from "../../assets/images/welcomeImg.png";
-import NavbarSmall from "../../components/NavbarSmall.js";
+import NavbarSmall from "../../components/layout/NavbarSmall.js";
 
 const initialStateValue = {
   email: "",

@@ -1,0 +1,7 @@
+.pageContainer {
+  position: relative;
+  min-height: 100vh;
+  background: var(--black-900);
+  color: #fff;
+  font-family: "Barlow Condensed", sans-serif;
+}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
-import NavbarSmall from "../../components/NavbarSmall.js";
+import NavbarSmall from "../../components/layout/NavbarSmall.js";
 
 import styles from "./Signup.module.css";
 import BurgerImg from "../../assets/images/welcomeImg.png";

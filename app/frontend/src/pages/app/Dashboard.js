@@ -3,7 +3,7 @@ import { AiFillFire, AiFillStar } from "react-icons/ai";
 import { HiDocumentText } from "react-icons/hi";
 
 import styles from "./Dashboard.module.css";
-import NavbarBig from "../../components/NavbarBig";
+import NavbarBig from "../../components/layout/NavbarBig";
 
 export default function Dashboard() {
   const navigate = useNavigate();
