@@ -21,11 +21,12 @@ export default function RecipeCard({
         <h3>{name}</h3>
         <h5>{difficulty}</h5>
         <div className={styles.badgesContainer}>
-          {badges.map((badge) => (
-            <p className={styles.badge}>{badge}</p>
-          ))}
+          {badges.map((badge) => {
+            if (!badge) return undefined;
+            return <p className={styles.badge}>{badge}</p>;
+          })}
         </div>
-        <p className={styles.updateData}>{update}</p>
+        <p className={styles.updateData}>Updated {update}</p>
       </div>
     </div>
   );

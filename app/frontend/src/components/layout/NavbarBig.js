@@ -48,7 +48,7 @@ export default function NavbarBig() {
             Create
           </NavLink>
           <NavLink
-            to={"/app/recipes/all"}
+            to={"/app/recipes"}
             className={({ isActive }) =>
               isActive ? styles.activeOption : undefined
             }

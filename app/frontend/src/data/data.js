@@ -257,4 +257,17 @@ const DUMMY = [
   },
 ];
 
+export const dummyIngredients = [
+  "Tomatoes",
+  "Onions",
+  "Garlic",
+  "Olive Oil",
+  "Salt",
+  "Black Pepper",
+  "Chicken Breast",
+  "Basil Leaves",
+  "Mozzarella Cheese",
+  "Pasta",
+];
+
 export default DUMMY;

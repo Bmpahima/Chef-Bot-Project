@@ -1,17 +1,103 @@
 .cardContainer {
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
-  padding: 24px 32px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
   margin: 0;
   display: flex;
   align-items: center;
+  gap: 16px;
+  padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.cardContainer:hover {
+  transform: translateY(-5px);
+  filter: brightness(1.5);
 }
 
 .imgContainer {
-  height: 80px;
-  width: 80px;
+  flex-shrink: 0;
+  height: 70px;
+  width: 70px;
   border-radius: 50%;
   background: linear-gradient(180deg, var(--green-400), var(--green-700));
   border: 1px solid var(--gray-700);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imgContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.textContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.textContainer h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.textContainer h5 {
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin: 0;
+  color: var(--gray-400);
+}
+
+.badgesContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  font-size: 1.2rem;
+  color: var(--gray-300);
+  margin-top: 4px;
+  background: var(--green-900);
+  padding: 4px 8px;
+  text-align: center;
+  border-radius: 6px;
+  border: 2px solid var(--green-700);
+}
+
+.updateData {
+  font-size: 1rem;
+  color: var(--gray-500);
+  margin-top: 14px;
+}
+
+@media (max-width: 600px) {
+  .cardContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .imgContainer {
+    height: 60px;
+    width: 60px;
+  }
+
+  .textContainer h3 {
+    font-size: 1.2rem;
+  }
+
+  .textContainer h5 {
+    font-size: 0.9rem;
+  }
 }

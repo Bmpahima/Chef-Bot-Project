@@ -1,0 +1,36 @@
+.ingItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ingItem input {
+  width: 100%;
+  z-index: 1;
+  background-color: transparent;
+  outline: 0;
+  padding: 8px;
+  border: none;
+  font-size: 20px;
+  color: var(--gray-400);
+  flex-wrap: wrap;
+}
+
+.ingItem input::placeholder {
+  font-weight: 400;
+}
+
+.ingItem input:focus {
+  background-color: var(--black-700);
+  color: #fff;
+}
+
+.ingItem button {
+  z-index: 10;
+  position: absolute;
+  right: 0;
+  background-color: transparent;
+  border: none;
+  margin-left: 10px;
+}

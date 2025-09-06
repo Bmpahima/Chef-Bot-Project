@@ -37,7 +37,7 @@ export default function RecipesPage() {
                 recipe.kosher && "kosher",
                 recipe.cuisine !== "other" && recipe.cuisine,
               ]}
-              update={new Date(recipe.updatedAt).toISOString}
+              update={new Date(recipe.updatedAt).toDateString()}
             />
           ))}
         </section>

@@ -62,3 +62,14 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
+
+.pageSelector {
+  display: flex;
+  justify-content: space-between;
+  align-items: 0;
+  margin: 20px 0;
+}
+
+.pageSelector p {
+  font-size: 24px;
+}

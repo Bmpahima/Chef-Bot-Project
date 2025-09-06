@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import Welcome from "./auth/Welcome.js";
 import Login from "./auth/Login.js";
 import Signup from "./auth/Signup.js";
@@ -6,6 +10,9 @@ import Dashboard from "./app/Dashboard.js";
 import RecipesPage from "./app/recipes/RecipesPage.js";
 import RecipeDetail from "./app/recipes/RecipeDetail.js";
 import RecipeGenerator from "./app/generateRecipe/RecipeGenerator.js";
+import UploadImage from "./app/generateRecipe/create-options/UploadImage.js";
+import ManualEntry from "./app/generateRecipe/create-options/ManualEntry.js";
+import AISuggestions from "./app/generateRecipe/create-options/AISuggestions.js";
 import Profile from "./settings/Profile.js";
 
 const router = createBrowserRouter([
@@ -29,6 +36,7 @@ const router = createBrowserRouter([
         path: "recipes",
         element: null,
         children: [
+          { index: true, element: <Navigate to="all" replace /> },
           { path: "all", element: <RecipesPage /> },
           { path: ":id", element: <RecipeDetail /> },
         ],
@@ -37,13 +45,13 @@ const router = createBrowserRouter([
         path: "create",
         element: <RecipeGenerator />,
         children: [
-          { path: "upload", element: null },
-          { path: "review", element: null },
-          { path: "constraints", element: null },
-          { path: "generate", element: null },
-          { path: "publish", element: null },
+          { index: true, element: <Navigate to="upload" replace /> },
+          { path: "upload", element: <UploadImage /> },
+          { path: "manual", element: <ManualEntry /> },
+          { path: "ai", element: <AISuggestions /> },
         ],
       },
+
       {
         path: "profile",
         element: <Profile />,

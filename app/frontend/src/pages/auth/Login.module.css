@@ -89,6 +89,7 @@
   padding: 1.2rem 0 0.5rem 0;
   font-size: 1.2rem;
   color: #fff;
+  outline: none;
 }
 
 .loginForm__input input:focus {
