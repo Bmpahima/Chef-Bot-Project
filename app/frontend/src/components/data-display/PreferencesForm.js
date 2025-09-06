@@ -18,6 +18,8 @@ import {
 export default function PreferencesForm() {
   const [preferences, setPreferences] = useState(INITIAL_CONSTRAINTS);
 
+  const onPreferencesChange = (name, value) => {};
+
   return (
     <form className={styles.prefForm}>
       <div className={styles.cuisineContainer}>
@@ -27,7 +29,6 @@ export default function PreferencesForm() {
             <label key={cuisine.value} style={{ display: "block" }}>
               <input
                 type="checkbox"
-                value={cuisine.value}
                 checked={preferences.cuisine.includes(cuisine.value)}
               />
               {cuisine.label}
@@ -57,7 +58,7 @@ export default function PreferencesForm() {
           </div>
         </div>
         <div className={styles.servingsContainer}>
-          <label htmlFor="prepTime">Servings</label>
+          <label htmlFor="servings">Servings</label>
           <div>
             <input
               type="number"
@@ -76,7 +77,10 @@ export default function PreferencesForm() {
         <div>
           {DIET_TOGGLES.map((diet) => (
             <label key={diet.value} style={{ display: "block" }}>
-              <input type="checkbox" value={diet.value} />
+              <input
+                type="checkbox"
+                checked={preferences.diet.includes(diet.key)}
+              />
               {diet.label}
             </label>
           ))}
@@ -84,7 +88,7 @@ export default function PreferencesForm() {
       </div>
 
       <div className={styles.flavorsContainer}>
-        <label htmlFor="prepTime">Flavor</label>
+        <label htmlFor="flavors">Flavor</label>
         <div>
           {FLAVOR_OPTIONS.map((opt) => (
             <button
@@ -110,7 +114,7 @@ export default function PreferencesForm() {
             type="number"
             min={PREP_TIME_MIN}
             max={PREP_TIME_MAX}
-            defaultValue={INITIAL_CONSTRAINTS.prepTimeMinutes}
+            value={preferences.prepTimeMinutes}
             name="prepTime"
             id="prepTime"
           />
@@ -121,7 +125,7 @@ export default function PreferencesForm() {
             type="number"
             min={COOK_TIME_MIN}
             max={COOK_TIME_MAX}
-            defaultValue={INITIAL_CONSTRAINTS.cookTimeMinutes}
+            value={preferences.cookTimeMinutes}
             name="cookTime"
             id="cookTome"
           />
