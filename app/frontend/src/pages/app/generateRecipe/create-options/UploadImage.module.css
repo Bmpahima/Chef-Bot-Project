@@ -141,7 +141,7 @@
   font-weight: 300;
   background: linear-gradient(180deg, var(--green-900) 10%, var(--green-950));
   border: none;
-  border-radius: 8px;
+  border-radius: 999px;
   color: #fff;
   cursor: pointer;
   margin-top: 20px;
@@ -156,136 +156,6 @@
 .prefContainer {
   grid-area: 2 / 1 / 3 / 3;
 }
-/* 
-.prefForm {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, auto);
-}
-
-.cuisineContainer {
-  grid-area: 1 / 1 / 3 / 2;
-}
-
-.weightContainer {
-  grid-area: 1 / 2 / 2 / 3;
-  display: flex;
-  flex-direction: column;
-}
-
-.diffContainer,
-.servingsContainer,
-.flavorsContainer,
-.timesContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-
-.diffContainer label,
-.cuisineContainer legend,
-.servingsContainer label,
-.dietsContainer legend,
-.flavorsContainer label,
-.timesContainer label {
-  font-size: 22px;
-  font-weight: 500;
-}
-
-.diffContainer > div,
-.servingsContainer > div,
-.dietsContainer > div {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.diffBtn {
-  padding: 6px 14px;
-  border: none;
-  border-radius: 12px;
-  font-size: 20px;
-  transition: filter 0.5s ease, transform 0.5s ease;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
-}
-
-.diffBtn:hover,
-.flavorBtn:hover,
-.addButton:hover {
-  filter: brightness(1.5);
-  transform: translateY(-1.5px);
-}
-
-.servingsContainer > div {
-  font-size: 20px;
-}
-
-.servingsContainer input,
-.timesContainer input {
-  background-color: var(--black-700);
-  border: none;
-  color: #fff;
-  outline: 0;
-  padding: 6px;
-}
-
-.selectedDiffBtn {
-  border: 1 solid rgba(256, 256, 256, 0.18) inset;
-  filter: brightness(1.5);
-  color: #fff;
-}
-
-.dietsContainer {
-  grid-area: 2 / 2 / 3 / 3;
-}
-
-.dietsContainer label,
-.cuisineContainer label {
-  font-size: 20px;
-  font-weight: 300;
-  color: var(--gray-300);
-}
-
-.dietsContainer input,
-.cuisineContainer input {
-  accent-color: var(--green-500);
-  border: none;
-}
-
-.dietsContainer input:checked label {
-  color: #fff;
-}
-
-.flavorsContainer {
-  grid-area: 1 / 3 / 2 / 4;
-}
-
-.flavorsContainer > div {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.flavorBtn {
-  background: var(--black-700);
-  border: 2px solid var(--black-500);
-  border-radius: 10px;
-  padding: 6px 8px;
-  font-size: 18px;
-  color: #fff;
-  transition: filter 0.5s ease, transform 0.5s ease;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
-}
-
-.timesContainer {
-  grid-area: 2 / 3 / 3 / 4;
-}
-
-.timesContainer input {
-  width: 40%;
-} */
 
 .submittion {
   display: flex;

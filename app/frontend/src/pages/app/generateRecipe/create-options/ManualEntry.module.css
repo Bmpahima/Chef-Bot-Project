@@ -1,0 +1,188 @@
+.container {
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  gap: 1rem;
+  margin-bottom: 40px;
+}
+
+.container > div {
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 16px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.imageUploadContainer {
+  grid-area: 1 / 1 / 2 / 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.imageUploadContainer h2,
+.detectedIng h2,
+.prefContainer h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.imageUploadContainer h2 span,
+.detectedIng h2 span,
+.prefContainer h2 span {
+  color: var(--gray-300);
+  font-weight: 400;
+}
+
+.dropzone {
+  flex: 1;
+  min-height: 200px;
+  width: 100%;
+  background-color: var(--black-800);
+  border: 2px dashed var(--black-500);
+  border-radius: 12px;
+  margin: 0 0 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: filter 0.5s ease, border 0.5s ease;
+}
+
+.dropzone:hover {
+  filter: brightness(1.5);
+  border: 2px dashed #fff;
+}
+
+.dropzoneMessage {
+  font-size: 24px;
+}
+
+.errorFileMessage {
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.detectButton {
+  margin-top: auto;
+  align-items: center;
+  background-image: linear-gradient(
+    144deg,
+    var(--green-400),
+    var(--green-600) 50%,
+    var(--green-300)
+  );
+  border: 0;
+  border-radius: 8px;
+  box-shadow: var(--green-900) 0 8px 14px -8px;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  font-size: 24px;
+  justify-content: center;
+  line-height: 1em;
+  width: 100%;
+  padding: 3px;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.detectButton:active,
+.detectButton:hover {
+  outline: 0;
+}
+
+.detectButton span {
+  background-color: var(--black-950);
+  padding: 12px 20px;
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  transition: 300ms;
+}
+
+.detectButton:hover span {
+  background: none;
+}
+
+.detectButton:active {
+  transform: scale(0.9);
+}
+
+.detectedIng {
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.ingList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 18px;
+  row-gap: 8px;
+}
+
+.addContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.addButton {
+  min-width: 5rem;
+  padding: 8px 12px;
+  font-size: 22px;
+  font-weight: 300;
+  background: linear-gradient(180deg, var(--green-900) 10%, var(--green-950));
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.addButton:hover {
+  filter: brightness(1.5);
+  transform: translateY(-1.5px);
+}
+
+.prefContainer {
+  grid-area: 1 / 2 / 2 / 3;
+}
+
+.submittion {
+  display: flex;
+  justify-content: center;
+}
+
+.generateBtn {
+  cursor: pointer;
+  padding: 12px clamp(24px, 20vw, 60px);
+  font-size: 2.4rem;
+  font-weight: 500;
+  transition: 0.8s;
+  background-size: 280% auto;
+  background-image: linear-gradient(
+    325deg,
+    var(--green-200) 0%,
+    var(--green-400) 55%,
+    var(--green-400) 90%
+  );
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  box-shadow: 0px 0px 20px var(--green-300), 0px 5px 5px -1px var(--green-400),
+    inset 4px 4px 8px var(--green-600), inset -4px -4px 8px var(--green-400);
+}
+
+.generateBtn:is(:hover, :active) {
+  transform: translateY(-2px);
+  box-shadow: 0px 0px 30px var(--green-300), 0px 5px 5px -1px var(--green-400),
+    inset 4px 4px 8px var(--green-600), inset -4px -4px 8px var(--green-400);
+}

@@ -3,12 +3,17 @@ import { useState, useMemo } from "react";
 
 import styles from "./UploadImage.module.css";
 import IngredientItem from "../../../../components/data-display/IngredientItem";
-import { dummyIngredients } from "../../../../data/data";
 import PreferencesForm from "../../../../components/data-display/PreferencesForm";
+import { appAPI } from "../../../../http/api";
+import { INITIAL_CONSTRAINTS } from "../../../../data/constants.js";
 
 export default function UploadImage() {
   const [imageFile, setImageFile] = useState(null);
-  const [ingredients, setIngredients] = useState(dummyIngredients);
+  const [ingredients, setIngredients] = useState([""]);
+  const [isImageLoading, setIsImageLoading] = useState(false);
+  const [isGenLoading, setIsGenLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [preferences, setPreferences] = useState(INITIAL_CONSTRAINTS);
 
   const onAddIngManual = () => {
     if (ingredients.length >= 20) return;
@@ -28,6 +33,72 @@ export default function UploadImage() {
     setIngredients((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const getIngredientsByImage = async () => {
+    if (!imageFile) {
+      setErrors((prev) => ({ ...prev, image: "Select an image" }));
+      return;
+    }
+    try {
+      setIsImageLoading(true);
+      const fd = new FormData();
+      fd.append("image", imageFile);
+
+      const { data } = await appAPI.post("/image-upload", fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      if (data?.error) {
+        setErrors((prev) => ({
+          ...prev,
+          imageUpload: data.error || "Image upload failed, please try again.",
+        }));
+        setIsImageLoading(false);
+        return;
+      }
+      console.log(data.message);
+      setIngredients((prev) => {
+        if (prev.length === 1 && prev[0] === "") return data.ingredients;
+        else {
+          return [...prev].concat(data.ingredients);
+        }
+      });
+      setIsImageLoading(false);
+    } catch (err) {
+      setErrors((prev) => ({
+        ...prev,
+        imageUpload: err.message || "Image upload failed, please try again.",
+      }));
+      setIsImageLoading(false);
+    }
+  };
+
+  const onGenerate = async () => {
+    try {
+      setIsGenLoading(true);
+      const { data } = await appAPI.post("/image-generate", {
+        ingredients: ingredients.filter((i) => i !== ""),
+        constraints: preferences,
+      });
+      if (data?.error) {
+        setErrors((prev) => ({
+          ...prev,
+          generateError: "Error in Generating Recipe: " + data.error.message,
+        }));
+        setIsGenLoading(false);
+        return;
+      }
+
+      console.log(data.recipe);
+      setIsGenLoading(false);
+      return;
+    } catch (error) {
+      setErrors((prev) => ({
+        ...prev,
+        generateError: "Error in Generating Recipe: " + error.message,
+      }));
+      setIsGenLoading(false);
+    }
+  };
+
   const {
     getRootProps,
     getInputProps,
@@ -39,7 +110,6 @@ export default function UploadImage() {
     accept: { "image/*": [] },
     maxFiles: 1,
     onDrop: (accepted) => {
-      console.log(accepted[0]);
       setImageFile(accepted[0]);
     },
   });
@@ -71,8 +141,13 @@ export default function UploadImage() {
                 "File is not supported, please try again"}
             </p>
           )}
-          <button type="button" className={styles.detectButton}>
-            <span>Detect Ingredients</span>
+          <button
+            type="button"
+            className={styles.detectButton}
+            onClick={getIngredientsByImage}
+            disabled={isImageLoading}
+          >
+            <span>{isImageLoading ? "Loading..." : "Detect Ingredients"}</span>
           </button>
         </div>
         <div className={styles.detectedIng}>
@@ -101,12 +176,21 @@ export default function UploadImage() {
         </div>
         <div className={styles.prefContainer}>
           <h2>Preferences & constraints</h2>
-          <PreferencesForm />
+          <PreferencesForm
+            columns={3}
+            preferences={preferences}
+            setPreferences={setPreferences}
+          />
         </div>
       </div>
       <div className={styles.submittion}>
-        <button type="button" className={styles.generateBtn}>
-          Generate
+        <button
+          type="button"
+          className={styles.generateBtn}
+          onClick={onGenerate}
+          disabled={isGenLoading}
+        >
+          {isGenLoading ? "Generating a Recipe..." : "Generate"}
         </button>
       </div>
     </>

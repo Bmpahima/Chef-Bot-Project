@@ -1,12 +1,53 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { AiFillFire, AiFillStar } from "react-icons/ai";
 import { HiDocumentText } from "react-icons/hi";
+import { useEffect, useState } from "react";
 
 import styles from "./Dashboard.module.css";
 import NavbarBig from "../../components/layout/NavbarBig";
+import { useUser } from "../../store/userContext";
+import { appAPI } from "../../http/api";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [recipes, setRecipes] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState(false);
+  const userCtx = useUser();
+
+  useEffect(() => {
+    const getRecipesFromDb = async () => {
+      setIsLoading(true);
+      try {
+        const { data } = await appAPI.get("/get-dashboard");
+        if (data?.error) {
+          console.error("Error:", data.error);
+        } else {
+          setRecipes(data.recipes);
+        }
+      } catch (err) {
+        console.error("Request failed:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getRecipesFromDb();
+  }, []);
+
+  let recipesContent = undefined;
+
+  if (isLoading) {
+    recipesContent = <p>Recipes are loading...</p>;
+  } else if (recipes.length === 0) {
+    recipesContent = <p>You have no recipes.</p>;
+  } else {
+    recipesContent = recipes.map((r) => (
+      <div className={styles.recipeCard}>
+        <span>r.name</span>
+      </div>
+    ));
+  }
 
   return (
     <div className={styles.pageContainer}>
@@ -14,10 +55,10 @@ export default function Dashboard() {
       <section className={styles.content}>
         <div className={styles.content__header}>
           <div>
-            <h1>Welcome Back, Ben!</h1>
+            <h1>Welcome Back, {userCtx.user.username}!</h1>
             <div className={styles.statsRow}>
               <div className={styles.statCard}>
-                <span className={styles.statNumber}>83</span>
+                <span className={styles.statNumber}>{recipes.length}</span>
                 <span className={styles.statLabel}>Total Recipes</span>
               </div>
               <div className={styles.statCard}>
@@ -61,23 +102,10 @@ export default function Dashboard() {
         </div>
         <div className={styles.content__body__recent}>
           <div className={styles.blockHead}>
-            <h3>Recent Recipe</h3>
-            <NavLink>View All</NavLink>
+            <h3>Recent Recipes</h3>
+            {recipes.length > 0 && <NavLink>View All</NavLink>}
           </div>
-          <div className={styles.recentList}>
-            <div className={styles.recipeCard}>
-              <span>Burger</span>
-            </div>
-            <div className={styles.recipeCard}>
-              <span>Spaghetti</span>
-            </div>
-            <div className={styles.recipeCard}>
-              <span>Sandwich</span>
-            </div>
-            <div className={styles.recipeCard}>
-              <span>Salad</span>
-            </div>
-          </div>
+          <div className={styles.recentList}>{recipesContent}</div>
         </div>
       </section>
       {/* <footer></footer> */}

@@ -13,6 +13,17 @@ const CUISINE_ENUM = [
   "other",
 ];
 
+const FLAVORS_ENUM = [
+  "spicy",
+  "sweet",
+  "salty",
+  "savory",
+  "sour",
+  "bitter",
+  "fresh",
+  "comfort",
+];
+
 const ingredientSchema = new Schema({
   ingredientName: { type: String, required: true, trim: true },
   amount: { type: Number, required: true, min: 0 },
@@ -59,6 +70,7 @@ const recipeSchema = new Schema(
 
     cuisine: { type: String, enum: CUISINE_ENUM, default: "other" },
     difficulty: { type: String, enum: DIFFICULTY_ENUM, default: "easy" },
+    flavors: { type: String, enum: FLAVORS_ENUM, default: "" },
 
     servings: { type: Number, default: 1, min: 1 },
     prepTimeMinutes: { type: Number, default: 0, min: 0 },

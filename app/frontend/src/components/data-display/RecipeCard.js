@@ -23,7 +23,11 @@ export default function RecipeCard({
         <div className={styles.badgesContainer}>
           {badges.map((badge) => {
             if (!badge) return undefined;
-            return <p className={styles.badge}>{badge}</p>;
+            return (
+              <p key={`${badge}`} className={styles.badge}>
+                {badge}
+              </p>
+            );
           })}
         </div>
         <p className={styles.updateData}>Updated {update}</p>

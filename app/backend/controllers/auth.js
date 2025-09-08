@@ -1,4 +1,8 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config({ override: true });
 
 import User from "../models/user.js";
 
@@ -22,7 +26,18 @@ export const loginController = async (req, res, next) => {
       next(error);
     }
 
-    res.status(200).json({ message: "User logged in succesfully." });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "2h",
+    });
+    res.status(200).json({
+      message: "User logged in succesfully.",
+      token: token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
   } catch (err) {
     next(err);
   }
@@ -31,7 +46,6 @@ export const loginController = async (req, res, next) => {
 export const signupController = async (req, res, next) => {
   try {
     const body = req.body;
-    console.log(req.body);
     const username = body.username;
     const email = body.email;
     const password = body.password;
@@ -51,6 +65,30 @@ export const signupController = async (req, res, next) => {
     await newUser.save();
 
     res.status(201).json({ message: "User signed up succesfully." });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const meController = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      const error = new Error("User is not exist.");
+      error.status = 401;
+      next(error);
+    }
+
+    res.status(200).json({
+      message: "User authenticated.",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
   } catch (err) {
     next(err);
   }

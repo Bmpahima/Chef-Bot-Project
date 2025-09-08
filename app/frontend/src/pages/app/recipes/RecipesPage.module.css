@@ -68,8 +68,31 @@
   justify-content: space-between;
   align-items: 0;
   margin: 20px 0;
+  position: relative;
 }
 
 .pageSelector p {
+  margin: 0;
   font-size: 24px;
+}
+
+.paginationContainer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.paginationContainer button {
+  background: var(--black-700);
+  border: none;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.5s ease;
+}
+
+.paginationContainer button:hover {
+  background: var(--black-500);
 }

@@ -12,6 +12,7 @@ export default function NavbarBig() {
     if (p.startsWith("/app/create")) return "Create Recipe";
     if (p.startsWith("/app/profile")) return "Profile";
     if (p.startsWith("/app/dashboard")) return "Dashboard";
+    if (p.startsWith("/app/preview")) return "Recipe Preview";
     return "Page";
   };
 

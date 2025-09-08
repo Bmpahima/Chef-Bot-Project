@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import BurgerImg from "../../assets/images/welcomeImg.png";
 import NavbarSmall from "../../components/layout/NavbarSmall.js";
+import { useUser } from "../../store/userContext.js";
 
 const initialStateValue = {
   email: "",
@@ -16,6 +17,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
+  const userCtx = useUser();
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -42,8 +44,8 @@ export default function Login() {
         setErrors((prev) => [...prev, data.error]);
         return;
       }
-
       console.log(data);
+      userCtx.login(data.user, data.token);
       navigate("/app/dashboard");
     } catch (err) {
       const msg = err.message || "Login failed";
@@ -53,6 +55,7 @@ export default function Login() {
       setIsLoading(false);
     }
   };
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.curvedCut} aria-hidden="true"></div>

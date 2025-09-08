@@ -6,6 +6,7 @@ import {
 import Welcome from "./auth/Welcome.js";
 import Login from "./auth/Login.js";
 import Signup from "./auth/Signup.js";
+import PrivateRoutes from "./app/PrivateRoute.js";
 import Dashboard from "./app/Dashboard.js";
 import RecipesPage from "./app/recipes/RecipesPage.js";
 import RecipeDetail from "./app/recipes/RecipeDetail.js";
@@ -14,6 +15,8 @@ import UploadImage from "./app/generateRecipe/create-options/UploadImage.js";
 import ManualEntry from "./app/generateRecipe/create-options/ManualEntry.js";
 import AISuggestions from "./app/generateRecipe/create-options/AISuggestions.js";
 import Profile from "./settings/Profile.js";
+import RecipePreview from "./app/generateRecipe/RecipePreview.js";
+import { UserProvider } from "../store/userContext.js";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +32,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/app",
-    element: null,
+    element: <PrivateRoutes />,
     children: [
       { path: "dashboard", element: <Dashboard /> },
       {
@@ -51,7 +54,10 @@ const router = createBrowserRouter([
           { path: "ai", element: <AISuggestions /> },
         ],
       },
-
+      {
+        path: "preview",
+        element: <RecipePreview />,
+      },
       {
         path: "profile",
         element: <Profile />,
@@ -61,7 +67,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
+  );
 }
 
 export default App;

@@ -34,9 +34,9 @@ export default function RecipeDetail() {
             </div>
           </div>
           <div className={styles.confOptionsContainer}>
-            <button>Edit</button>
-            <button>Save</button>
-            <button>Share</button>
+            <button type="button">Edit</button>
+            <button type="button">Delete</button>
+            <button type="button">Share</button>
           </div>
         </section>
         <section className={styles.instructionGrid}>
@@ -52,7 +52,7 @@ export default function RecipeDetail() {
             </ul>
           </div>
           <div className={styles.instructionsContainer}>
-            <h2>Intructions</h2>
+            <h2>Instructions</h2>
             <p>
               1. Rinse and drain the checkpeas.
               <br />

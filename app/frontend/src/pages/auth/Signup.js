@@ -47,7 +47,7 @@ export default function Signup() {
         return;
       }
 
-      navigate("/app/dashboard");
+      navigate("/auth/login");
     } catch (error) {
       const msg = error.message || "Login failed";
       setErrors((prev) => [...prev, msg]);

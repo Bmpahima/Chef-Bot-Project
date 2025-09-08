@@ -3,16 +3,18 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
-dotenv.config({ override: true });
-
-import authController from "./routes/auth.js";
+import authRouter from "./routes/auth.js";
+import applicationRouter from "./routes/application.js";
 
 const app = express();
+
+dotenv.config({ override: true });
 
 app.use(express.json());
 app.use(cors());
 
-app.use("/auth", authController);
+app.use("/auth", authRouter);
+app.use("/app", applicationRouter);
 
 app.use((err, req, res, next) => {
   console.log(err);

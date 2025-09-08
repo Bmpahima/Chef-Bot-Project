@@ -46,7 +46,7 @@ export const DIET_TOGGLES = [
 export const INITIAL_CONSTRAINTS = {
   cuisine: ["other"],
   difficulty: "easy",
-  diet: ["vegetarian", "kosher"],
+  diet: ["kosher"],
   servings: SERVINGS_DEFAULT,
   prepTimeMinutes: TIME_MINUTES_DEFAULT,
   cookTimeMinutes: TIME_MINUTES_DEFAULT,
