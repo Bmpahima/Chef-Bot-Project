@@ -1,16 +1,21 @@
 import styles from "./ManualEntry.module.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import IngredientItem from "../../../../components/data-display/IngredientItem";
 import PreferencesForm from "../../../../components/data-display/PreferencesForm";
 import { INITIAL_CONSTRAINTS } from "../../../../data/constants.js";
 import { appAPI } from "../../../../http/api.js";
+import { useDraftRecipe } from "../../../../store/recipeDraftContext.js";
 
 export default function ManualEntry() {
   const [ingredients, setIngredients] = useState([""]);
   const [preferences, setPreferences] = useState(INITIAL_CONSTRAINTS);
   const [isGenLoading, setIsGenLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errorMsg, setErrorMsg] = useState();
+
+  const draftCtx = useDraftRecipe();
+  const navigate = useNavigate();
 
   const onAddIngManual = () => {
     if (ingredients.length >= 20) return;
@@ -38,22 +43,15 @@ export default function ManualEntry() {
         constraints: preferences,
       });
       if (data?.error) {
-        setErrors((prev) => ({
-          ...prev,
-          generateError: "Error in Generating Recipe: " + data.error.message,
-        }));
-        setIsGenLoading(false);
+        setErrorMsg("Error in Generating Recipe: " + data.error);
         return;
       }
-
       console.log(data.recipe);
-      setIsGenLoading(false);
-      return;
+      draftCtx.saveDraft(data.recipe);
+      navigate("/app/preview");
     } catch (error) {
-      setErrors((prev) => ({
-        ...prev,
-        generateError: "Error in Generating Recipe: " + error.message,
-      }));
+      setErrorMsg("Error in Generating Recipe: " + error.message);
+    } finally {
       setIsGenLoading(false);
     }
   };
@@ -94,6 +92,7 @@ export default function ManualEntry() {
           />
         </div>
       </div>
+      {errorMsg && <p style={{ color: "crimson" }}>{errorMsg}</p>}
       <div className={styles.submittion}>
         <button
           type="button"

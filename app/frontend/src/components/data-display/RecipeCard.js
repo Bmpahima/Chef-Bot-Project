@@ -1,27 +1,28 @@
 import styles from "./RecipeCard.module.css";
 
-export default function RecipeCard({
-  id,
-  name,
-  imageUrl,
-  difficulty,
-  badges,
-  update,
-}) {
+import { useNavigate } from "react-router-dom";
+
+export default function RecipeCard({ recipe }) {
+  const navigate = useNavigate();
+
+  const onCardClick = () => {
+    navigate(`/app/recipes/${recipe?.id}`);
+  };
+
   return (
-    <div className={styles.cardContainer}>
+    <div className={styles.cardContainer} onClick={onCardClick}>
       <div className={styles.imgContainer}>
-        {imageUrl ? (
-          <img src={`${imageUrl}`} alt={name} />
+        {recipe ? (
+          <img src={`${recipe.imageUrl}`} alt={recipe.name} />
         ) : (
           <div className={styles.noImage}></div>
         )}
       </div>
       <div className={styles.textContainer}>
-        <h3>{name}</h3>
-        <h5>{difficulty}</h5>
+        <h3>{recipe.name}</h3>
+        <h5>{recipe.difficulty}</h5>
         <div className={styles.badgesContainer}>
-          {badges.map((badge) => {
+          {recipe.badges.slice(0, 4).map((badge) => {
             if (!badge) return undefined;
             return (
               <p key={`${badge}`} className={styles.badge}>
@@ -30,7 +31,9 @@ export default function RecipeCard({
             );
           })}
         </div>
-        <p className={styles.updateData}>Updated {update}</p>
+        <p className={styles.updateData}>
+          Updated {new Date(recipe.updatedAt).toDateString()}
+        </p>
       </div>
     </div>
   );

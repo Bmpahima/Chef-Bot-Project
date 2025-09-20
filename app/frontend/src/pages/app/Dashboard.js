@@ -42,9 +42,9 @@ export default function Dashboard() {
   } else if (recipes.length === 0) {
     recipesContent = <p>You have no recipes.</p>;
   } else {
-    recipesContent = recipes.map((r) => (
+    recipesContent = recipes.map((r, index) => (
       <div className={styles.recipeCard}>
-        <span>r.name</span>
+        <span key={`rec-${r.name}-${index}`}>{r.name}</span>
       </div>
     ));
   }
@@ -103,7 +103,9 @@ export default function Dashboard() {
         <div className={styles.content__body__recent}>
           <div className={styles.blockHead}>
             <h3>Recent Recipes</h3>
-            {recipes.length > 0 && <NavLink>View All</NavLink>}
+            {recipes.length > 0 && (
+              <NavLink to={"/app/recipes/all"}>View All</NavLink>
+            )}
           </div>
           <div className={styles.recentList}>{recipesContent}</div>
         </div>

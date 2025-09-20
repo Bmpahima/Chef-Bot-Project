@@ -1,19 +1,25 @@
 import { useDropzone } from "react-dropzone";
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
 
 import styles from "./UploadImage.module.css";
 import IngredientItem from "../../../../components/data-display/IngredientItem";
 import PreferencesForm from "../../../../components/data-display/PreferencesForm";
 import { appAPI } from "../../../../http/api";
 import { INITIAL_CONSTRAINTS } from "../../../../data/constants.js";
+import { useDraftRecipe } from "../../../../store/recipeDraftContext.js";
 
 export default function UploadImage() {
   const [imageFile, setImageFile] = useState(null);
   const [ingredients, setIngredients] = useState([""]);
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [isGenLoading, setIsGenLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errorMsg, setErrorMsg] = useState("");
   const [preferences, setPreferences] = useState(INITIAL_CONSTRAINTS);
+
+  const draftCtx = useDraftRecipe();
+  const navigate = useNavigate();
 
   const onAddIngManual = () => {
     if (ingredients.length >= 20) return;
@@ -35,7 +41,7 @@ export default function UploadImage() {
 
   const getIngredientsByImage = async () => {
     if (!imageFile) {
-      setErrors((prev) => ({ ...prev, image: "Select an image" }));
+      setErrorMsg((prev) => ({ ...prev, image: "Select an image" }));
       return;
     }
     try {
@@ -47,11 +53,7 @@ export default function UploadImage() {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (data?.error) {
-        setErrors((prev) => ({
-          ...prev,
-          imageUpload: data.error || "Image upload failed, please try again.",
-        }));
-        setIsImageLoading(false);
+        setErrorMsg("Error in Generating Ingredients: " + data.error);
         return;
       }
       console.log(data.message);
@@ -61,12 +63,9 @@ export default function UploadImage() {
           return [...prev].concat(data.ingredients);
         }
       });
-      setIsImageLoading(false);
     } catch (err) {
-      setErrors((prev) => ({
-        ...prev,
-        imageUpload: err.message || "Image upload failed, please try again.",
-      }));
+      setErrorMsg("Error in Generating Ingredients: " + err.message);
+    } finally {
       setIsImageLoading(false);
     }
   };
@@ -78,23 +77,18 @@ export default function UploadImage() {
         ingredients: ingredients.filter((i) => i !== ""),
         constraints: preferences,
       });
+
       if (data?.error) {
-        setErrors((prev) => ({
-          ...prev,
-          generateError: "Error in Generating Recipe: " + data.error.message,
-        }));
-        setIsGenLoading(false);
+        setErrorMsg("Error in Generating Recipe: " + data.error);
         return;
       }
 
       console.log(data.recipe);
-      setIsGenLoading(false);
-      return;
-    } catch (error) {
-      setErrors((prev) => ({
-        ...prev,
-        generateError: "Error in Generating Recipe: " + error.message,
-      }));
+      draftCtx.saveDraft(data.recipe);
+      navigate("/app/preview");
+    } catch (err) {
+      setErrorMsg("Error in Generating Ingredients: " + err.message);
+    } finally {
       setIsGenLoading(false);
     }
   };
@@ -131,15 +125,23 @@ export default function UploadImage() {
       <div className={styles.container}>
         <div className={styles.imageUploadContainer}>
           <h2>Upload a photo of ingredients</h2>
-          <div {...getRootProps({ className: styles.dropzone })}>
-            <input {...getInputProps()} />
-            <p className={styles.dropzoneMessage}>{message}</p>
-          </div>
-          {fileRejections.length > 0 && (
-            <p className={styles.errorFileMessage}>
-              {fileRejections[0].errors[0]?.message ||
-                "File is not supported, please try again"}
-            </p>
+          {isImageLoading ? (
+            <div className={styles.spinnerContainer}>
+              <Spinner animation="border" />
+            </div>
+          ) : (
+            <>
+              <div {...getRootProps({ className: styles.dropzone })}>
+                <input {...getInputProps()} />
+                <p className={styles.dropzoneMessage}>{message}</p>
+              </div>
+              {fileRejections.length > 0 && (
+                <p className={styles.errorFileMessage}>
+                  {fileRejections[0].errors[0]?.message ||
+                    "File is not supported, please try again"}
+                </p>
+              )}
+            </>
           )}
           <button
             type="button"

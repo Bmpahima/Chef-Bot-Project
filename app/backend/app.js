@@ -2,13 +2,23 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import authRouter from "./routes/auth.js";
 import applicationRouter from "./routes/application.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
 dotenv.config({ override: true });
+
+// TODO: 18/09/25
+app.use("/images", express.static(path.join(__dirname, "images")));
+
+console.log(path.join(__dirname, "images"));
 
 app.use(express.json());
 app.use(cors());
@@ -17,8 +27,6 @@ app.use("/auth", authRouter);
 app.use("/app", applicationRouter);
 
 app.use((err, req, res, next) => {
-  console.log(err);
-
   res.status(err.status || 500).json({
     error: err.message || "Something went wrong.",
   });

@@ -155,6 +155,8 @@
 .updation {
   display: flex;
   justify-content: space-between;
+  gap: 20px;
+  white-space: nowrap;
 }
 
 .creation p:nth-child(1),

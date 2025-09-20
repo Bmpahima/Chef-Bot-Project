@@ -16,14 +16,14 @@ export const loginController = async (req, res, next) => {
     if (!user) {
       const error = new Error("User is not exist.");
       error.status = 404;
-      next(error);
+      return next(error);
     }
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       const error = new Error("Password is incorrect.");
       error.status = 401;
-      next(error);
+      return next(error);
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
@@ -39,7 +39,7 @@ export const loginController = async (req, res, next) => {
       },
     });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -54,7 +54,7 @@ export const signupController = async (req, res, next) => {
     if (!hashedPassword) {
       const error = new Error("Failed to hash password");
       error.status = 500;
-      next(error);
+      return next(error);
     }
 
     const newUser = new User({
@@ -62,11 +62,16 @@ export const signupController = async (req, res, next) => {
       email: email,
       password: hashedPassword,
     });
-    await newUser.save();
+    try {
+      await newUser.save();
+    } catch (err) {
+      err.status = 400;
+      return next(err);
+    }
 
     res.status(201).json({ message: "User signed up succesfully." });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -78,7 +83,7 @@ export const meController = async (req, res, next) => {
     if (!user) {
       const error = new Error("User is not exist.");
       error.status = 401;
-      next(error);
+      return next(error);
     }
 
     res.status(200).json({
@@ -90,6 +95,6 @@ export const meController = async (req, res, next) => {
       },
     });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

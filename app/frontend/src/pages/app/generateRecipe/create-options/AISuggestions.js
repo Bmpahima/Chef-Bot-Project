@@ -1,14 +1,19 @@
 import styles from "./AISuggestions.module.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import PreferencesForm from "../../../../components/data-display/PreferencesForm";
 import { INITIAL_CONSTRAINTS } from "../../../../data/constants.js";
 import { appAPI } from "../../../../http/api.js";
+import { useDraftRecipe } from "../../../../store/recipeDraftContext.js";
 
 export default function AISuggestions() {
   const [preferences, setPreferences] = useState(INITIAL_CONSTRAINTS);
   const [isGenLoading, setIsGenLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const draftCtx = useDraftRecipe();
+  const navigate = useNavigate();
 
   const onGenerate = async () => {
     try {
@@ -17,22 +22,16 @@ export default function AISuggestions() {
         constraints: preferences,
       });
       if (data?.error) {
-        setErrors((prev) => ({
-          ...prev,
-          generateError: "Error in Generating Recipe: " + data.error.message,
-        }));
-        setIsGenLoading(false);
+        setErrorMsg("Error in Generating Recipe: " + data.error);
         return;
       }
 
       console.log(data.recipe);
-      setIsGenLoading(false);
-      return;
+      draftCtx.saveDraft(data.recipe);
+      navigate("/app/preview");
     } catch (error) {
-      setErrors((prev) => ({
-        ...prev,
-        generateError: "Error in Generating Recipe: " + error.message,
-      }));
+      setErrorMsg("Error in Generating Recipe: " + error.message);
+    } finally {
       setIsGenLoading(false);
     }
   };

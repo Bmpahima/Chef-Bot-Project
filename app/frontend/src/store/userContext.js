@@ -1,9 +1,15 @@
-// store/userContext.jsx
 import { createContext, useState, useEffect, useContext } from "react";
 import { authAPI } from "../http/api";
 const INITIAL_USER = { id: null, username: "", email: "" };
 
-const UserContext = createContext(null);
+const UserContext = createContext({
+  user: INITIAL_USER,
+  isAuthenticated: false,
+  loading: true,
+  login: async (_token) => {},
+  logout: () => {},
+});
+
 export const useUser = () => useContext(UserContext);
 
 export function UserProvider({ children }) {

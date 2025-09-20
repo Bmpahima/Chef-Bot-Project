@@ -9,8 +9,12 @@ import {
   getImageRecipeController,
   getManualRecipeController,
   getAIRecipeController,
+  getAllRecipesController,
+  postSaveRecipe,
+  getRecipeById,
 } from "../controllers/application.js";
 import isAuth from "../middleware/is-auth.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -24,14 +28,17 @@ const fileFilter = (req, file, cb) => {
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "..", "images"));
+    cb(null, path.join(__dirname, "..", "images", "uploaded"));
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString + "-" + file.originalname);
+    const ts = new Date().toISOString().replace(/[:.]/g, "-");
+    const ext = path.extname(file.originalname).toLowerCase();
+    const base = path
+      .basename(file.originalname, ext)
+      .replace(/[^\w\-]+/g, "_");
+    cb(null, `${ts}-${base}${ext}`);
   },
 });
-
-// app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single());
 
 const router = express.Router();
 
@@ -54,5 +61,14 @@ router.post("/manual-generate", isAuth, getManualRecipeController);
 
 // POST => /ai-generate
 router.post("/ai-generate", isAuth, getAIRecipeController);
+
+// GET => /recipes-all
+router.get("/recipes-all", isAuth, getAllRecipesController);
+
+// POST => /save-recipe
+router.post("/save-recipe", isAuth, postSaveRecipe);
+
+// GET => /get-recipe/:id
+router.get("/get-recipe/:id", isAuth, getRecipeById);
 
 export default router;

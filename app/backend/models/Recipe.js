@@ -22,6 +22,7 @@ const FLAVORS_ENUM = [
   "bitter",
   "fresh",
   "comfort",
+  "other",
 ];
 
 const ingredientSchema = new Schema({
@@ -29,7 +30,7 @@ const ingredientSchema = new Schema({
   amount: { type: Number, required: true, min: 0 },
   unit: {
     type: String,
-    enum: ["g", "kg", "ml", "l", "tsp", "tbsp", "cup", "piece"],
+    enum: ["g", "kg", "ml", "l", "tsp", "tbsp", "cup", "piece", "pcs"],
     required: true,
   },
 });
@@ -68,13 +69,13 @@ const recipeSchema = new Schema(
       required: true,
     },
 
-    cuisine: { type: String, enum: CUISINE_ENUM, default: "other" },
+    cuisine: { type: [String], enum: CUISINE_ENUM, default: ["other"] },
     difficulty: { type: String, enum: DIFFICULTY_ENUM, default: "easy" },
-    flavors: { type: String, enum: FLAVORS_ENUM, default: "" },
+    flavors: { type: [String], enum: FLAVORS_ENUM, default: "" },
 
     servings: { type: Number, default: 1, min: 1 },
-    prepTimeMinutes: { type: Number, default: 0, min: 0 },
-    cookTimeMinutes: { type: Number, default: 0, min: 0 },
+    prepTimeMinutes: { type: String, default: "0 min" },
+    cookTimeMinutes: { type: String, default: "0 min" },
 
     sourceUrl: { type: String, trim: true },
     url: { type: String, trim: true },
