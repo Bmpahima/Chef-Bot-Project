@@ -7,7 +7,9 @@ import {
   AISuggestionsRecipeGenerator,
   ManualRecipeGenerator,
   imageToIngredientsGenerator,
+  generateRecipeImage,
 } from "../AI/recipeGenerator.js";
+import { getBadges } from "../util/data-formating.js";
 
 export const getDashboardController = async (req, res, next) => {
   const userId = req.userId;
@@ -20,16 +22,22 @@ export const getDashboardController = async (req, res, next) => {
       return next(error);
     }
 
-    const recipes = await Recipe.find({ userId: userId })
-      .sort({ updatedAt: -1 })
-      .lean();
+    const [recipes, total] = await Promise.all([
+      Recipe.find({ userId: userId }).sort({ updatedAt: -1 }).limit(4).lean(),
+      Recipe.countDocuments({ userId }),
+    ]);
+
     if (!recipes) {
-      const error = new Error("User not found");
+      const error = new Error("No recipes found");
       error.status = 404;
       return next(error);
     }
 
-    res.status(200).json({ message: "Recipes found.", recipes: recipes });
+    return res.status(200).json({
+      message: "Recipes found.",
+      recipes: recipes,
+      totalRecipes: total,
+    });
   } catch (err) {
     return next(err);
   }
@@ -38,7 +46,6 @@ export const getDashboardController = async (req, res, next) => {
 export const getImageUploadController = async (req, res, next) => {
   try {
     const file = req.file;
-    console.log(file);
     if (!file) {
       const error = new Error("Unsupported file format.");
       error.status = 400;
@@ -77,7 +84,14 @@ export const getImageUploadController = async (req, res, next) => {
         ]
       : [];
 
-    res.status(200).json({
+    fs.unlink(file.path, (err) => {
+      if (err) {
+        return console.log(`ERROR: Failed to delete file: ${err.message}`);
+      }
+      console.log(`SUCCESS: File deleted: ${file.path}`);
+    });
+
+    return res.status(200).json({
       message:
         ingredients.length > 0
           ? "Ingredients detected succesfully."
@@ -127,7 +141,7 @@ export const getImageRecipeController = async (req, res, next) => {
       err.status = 500;
       return next(err);
     }
-    res.status(200).json({
+    return res.status(200).json({
       message: "Recipe generated successfully.",
       recipe: JSON.parse(recipe),
     });
@@ -174,7 +188,7 @@ export const getManualRecipeController = async (req, res, next) => {
       err.status = 500;
       return next(err);
     }
-    res.status(200).json({
+    return res.status(200).json({
       message: "Recipe generated successfully.",
       recipe: JSON.parse(recipe),
     });
@@ -205,7 +219,7 @@ export const getAIRecipeController = async (req, res, next) => {
       err.status = 500;
       return next(err);
     }
-    res.status(200).json({
+    return res.status(200).json({
       message: "Recipe generated successfully.",
       recipe: JSON.parse(recipe),
     });
@@ -218,7 +232,7 @@ export const getAllRecipesController = async (req, res, next) => {
   try {
     const userId = req.userId;
     const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-    const limit = parseInt(req.query.limit, 10 || 9);
+    const limit = parseInt(req.query.limit, 10) || 9;
     const skip = (page - 1) * limit;
 
     const [items, total] = await Promise.all([
@@ -233,14 +247,8 @@ export const getAllRecipesController = async (req, res, next) => {
     const formatted = items.map((recipe) => ({
       id: recipe._id,
       name: recipe.name,
-      badges: [
-        recipe.difficulty,
-        ...(recipe.cuisine || []),
-        ...(recipe.flavors || []),
-        recipe.kosher ? "Kosher" : undefined,
-        recipe.vegetarian ? "Vegetarian" : undefined,
-      ].filter(Boolean),
-      imageUrl: recipe.imageUrl || null,
+      badges: getBadges(recipe),
+      imageUrl: recipe.url || null,
       updatedAt: recipe.updatedAt,
       createdAt: recipe.createdAt,
     }));
@@ -267,6 +275,18 @@ export const postSaveRecipe = async (req, res, next) => {
       return next(error);
     }
 
+    const response = await generateRecipeImage(recipe.name, recipe.ingredients);
+
+    if (!response || !response.ok) {
+      const error = new Error(
+        response.message || "Error in Generating AI image."
+      );
+      error.status = 500;
+      return next(error);
+    }
+
+    console.log(response.path);
+
     const newRecipe = new Recipe({
       name: recipe.name,
       ingredients: recipe.ingredients,
@@ -281,7 +301,7 @@ export const postSaveRecipe = async (req, res, next) => {
       cookTimeMinutes: recipe.cookTime,
       userId: userId,
       sourceUrl: recipe.sourceUrl || "",
-      url: recipe.url || "",
+      url: response.path || "",
     });
 
     console.log(newRecipe);
@@ -294,7 +314,7 @@ export const postSaveRecipe = async (req, res, next) => {
       err.status = 400;
       return next(err);
     }
-    res.status(201).json({ message: "Recipe saved successfully" });
+    return res.status(201).json({ message: "Recipe saved successfully" });
   } catch (error) {
     error.status = 500;
     return next(error);
@@ -322,21 +342,20 @@ export const getRecipeById = async (req, res, next) => {
     }
 
     const formatted = {
-      id: recipeData._id,
+      _id: recipeData._id,
       name: recipeData.name,
       ingredients: recipeData.ingredients,
       instructions: recipeData.instructions,
-      badges: [
-        recipeData.difficulty,
-        ...(recipeData.cuisine || []),
-        ...(recipeData.flavors || []),
-        recipeData.kosher ? "Kosher" : undefined,
-        recipeData.vegetarian ? "Vegetarian" : undefined,
-      ].filter(Boolean),
-      imageUrl: recipeData.sourceUrl || null,
+      cuisine: recipeData.cuisine,
+      flavors: recipeData.flavors,
+      kosher: recipeData.kosher,
+      vegetarian: recipeData.vegetarian,
+      badges: getBadges(recipeData),
+      imageUrl: recipeData.url || null,
       updatedAt: recipeData.updatedAt,
-      cookTime: recipeData.cookTimeMinutes,
-      prepTime: recipeData.prepTimeMinutes,
+      cookTimeMinutes: recipeData.cookTimeMinutes,
+      prepTimeMinutes: recipeData.prepTimeMinutes,
+      difficulty: recipeData.difficulty,
       servings: recipeData.servings,
       createdAt: recipeData.createdAt,
       username: recipeData.userId.username,
@@ -344,7 +363,125 @@ export const getRecipeById = async (req, res, next) => {
 
     console.log(formatted);
 
-    res.status(200).json({ message: "Recipe found!", recipe: formatted });
+    return res
+      .status(200)
+      .json({ message: "Recipe found!", recipe: formatted });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteRecipeById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userId = req.userId;
+
+    if (!mongoose.isValidObjectId(id)) {
+      const err = new Error("Invalid recipe id");
+      err.status = 400;
+      return next(err);
+    }
+
+    const recipe = await Recipe.findById(id);
+    if (!recipe) {
+      const err = new Error(`Recipe with id: ${id} was not found.`);
+      err.status = 400;
+      return next(err);
+    }
+    if (recipe.userId._id.toString() !== userId.toString()) {
+      const err = new Error(`Unauthorized! User can't delete this recipe.`);
+      err.status = 401;
+      return next(err);
+    }
+
+    const deleted = await Recipe.deleteOne({ _id: id });
+    if (!deleted || deleted.deletedCount !== 1) {
+      const err = new Error(`Failed to delete recipe id ${id}`);
+      err.status = 500;
+      return next(err);
+    }
+
+    return res
+      .status(200)
+      .json({ deleted: true, message: "Recipe deleted succesfully." });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const putEditRecipeController = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { updatedRecipe } = req.body;
+    console.log(updatedRecipe);
+
+    if (!updatedRecipe || !updatedRecipe._id) {
+      const err = new Error("Invalid input on editing recipe.");
+      err.status = 400;
+      return next(err);
+    }
+    const editable = [
+      "name",
+      "cuisine",
+      "difficulty",
+      "cookTimeMinutes",
+      "flavors",
+      "ingredients",
+      "instructions",
+      "kosher",
+      "prepTimeMinutes",
+      "servings",
+      "vegetarian",
+    ];
+
+    const $set = Object.fromEntries(
+      editable
+        .filter((k) => updatedRecipe[k] !== undefined)
+        .map((k) => [k, updatedRecipe[k]])
+    );
+
+    const r = await Recipe.updateOne(
+      { _id: updatedRecipe._id, userId },
+      { $set },
+      { runValidators: true }
+    );
+
+    if (r.matchedCount === 0) {
+      const err = new Error("Recipe not found or not owned by user.");
+      err.status = 404;
+      return next(err);
+    }
+
+    return res.status(200).json({ message: "Recipe updated successfully" });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getProfileDataController = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    const [recipes, total] = await Promise.all([
+      Recipe.find({ userId: userId })
+        .sort({ updatedAt: -1 })
+        .limit(4)
+        .select("_id name url updatedAt")
+        .lean(),
+      Recipe.countDocuments({ userId }),
+    ]);
+
+    if (!recipes) {
+      const error = new Error("No recipes found");
+      error.status = 404;
+      return next(error);
+    }
+
+    return res.status(200).json({
+      message: "Recipes found.",
+      recipes: recipes,
+      totalRecipes: total,
+    });
   } catch (error) {
     return next(error);
   }

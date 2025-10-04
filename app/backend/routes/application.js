@@ -12,8 +12,14 @@ import {
   getAllRecipesController,
   postSaveRecipe,
   getRecipeById,
+  deleteRecipeById,
+  putEditRecipeController,
+  getProfileDataController,
 } from "../controllers/application.js";
 import isAuth from "../middleware/is-auth.js";
+
+import { validate } from "../middleware/validate.js";
+import * as validator from "../validators/application.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,7 +28,7 @@ const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image/")) {
     cb(null, true);
   } else {
-    cb(new Error("Only images is allowed!", false));
+    cb(new Error("Only images is allowed!"), false);
   }
 };
 
@@ -54,21 +60,70 @@ router.post(
 );
 
 // POST => /image-generate
-router.post("/image-generate", isAuth, getImageRecipeController);
+router.post(
+  "/image-generate",
+  isAuth,
+  validate(validator.imageOrManualRecipeValidator),
+  getImageRecipeController
+);
 
 // POST => /manual-generate
-router.post("/manual-generate", isAuth, getManualRecipeController);
+router.post(
+  "/manual-generate",
+  isAuth,
+  validate(validator.imageOrManualRecipeValidator),
+  getManualRecipeController
+);
 
 // POST => /ai-generate
-router.post("/ai-generate", isAuth, getAIRecipeController);
+router.post(
+  "/ai-generate",
+  isAuth,
+  validate(validator.aiRecipeValidator),
+  getAIRecipeController
+);
 
 // GET => /recipes-all
-router.get("/recipes-all", isAuth, getAllRecipesController);
+router.get(
+  "/recipes-all",
+  isAuth,
+  validate(validator.allRecipeValidator),
+  getAllRecipesController
+);
 
 // POST => /save-recipe
-router.post("/save-recipe", isAuth, postSaveRecipe);
+router.post(
+  "/save-recipe",
+  isAuth,
+  validate(validator.saveRecipeValidator),
+  postSaveRecipe
+);
 
 // GET => /get-recipe/:id
-router.get("/get-recipe/:id", isAuth, getRecipeById);
+router.get(
+  "/get-recipe/:id",
+  isAuth,
+  validate(validator.recipeByIdValidator),
+  getRecipeById
+);
+
+// DELETE => /delete-recipe/:id
+router.delete(
+  "/delete-recipe/:id",
+  isAuth,
+  validate(validator.deleteRecipeByIdValidator),
+  deleteRecipeById
+);
+
+// PUT => /edit-recipe
+router.put(
+  "/edit-recipe",
+  isAuth,
+  validate(validator.editRecipeValidator),
+  putEditRecipeController
+);
+
+// GET => /get-profile
+router.get("/get-profile", isAuth, getProfileDataController);
 
 export default router;

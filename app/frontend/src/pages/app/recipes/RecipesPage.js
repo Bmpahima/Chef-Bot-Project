@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { useEffect, useMemo, useState } from "react";
 
@@ -6,6 +6,8 @@ import styles from "./RecipesPage.module.css";
 import NavbarBig from "../../../components/layout/NavbarBig";
 import RecipeCard from "../../../components/data-display/RecipeCard";
 import { appAPI } from "../../../http/api";
+import ErrorMessage from "../../../components/UI/ErrorMessage";
+import axios from "axios";
 
 const PAGE_SIZE = 9;
 
@@ -14,6 +16,8 @@ export default function RecipesPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+
+  const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") || 1);
@@ -38,18 +42,21 @@ export default function RecipesPage() {
         const { data } = await appAPI.get("/recipes-all", {
           params: { page, limit: PAGE_SIZE },
         });
-        if (data?.error) {
-          setErrMsg(data.error);
-          setRecipes([]);
-          setTotal(0);
-          return;
-        }
         if (!cancelled) {
           console.log(data);
           setRecipes(data?.recipes ?? []);
+          console.log(data?.recipes);
           setTotal(data?.total ?? 0);
         }
       } catch (e) {
+        if (axios.isAxiosError(e)) {
+          if (e.response) {
+            setErrMsg(e.response.data);
+            setRecipes([]);
+            setTotal(0);
+            return;
+          }
+        }
         if (!cancelled) {
           setRecipes([]);
           setTotal(0);
@@ -70,64 +77,67 @@ export default function RecipesPage() {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <NavbarBig />
+    <>
+      <title>My Recipes</title>
+      <div className={styles.pageContainer}>
+        <NavbarBig />
 
-      <main className={styles.container}>
-        <section className={styles.header}>
-          <h1>Your Recipes</h1>
-          <div className={styles.actionsContainer}>
-            <div className={styles.genButton}>
-              <button /* onClick={() => navigate("/app/create")} */>
-                Generate Recipe
+        <main className={styles.container}>
+          <section className={styles.header}>
+            <h1>Your Recipes</h1>
+            <div className={styles.actionsContainer}>
+              <div className={styles.genButton}>
+                <button onClick={() => navigate("/app/create")}>
+                  Generate Recipe
+                </button>
+              </div>
+              <div>
+                <span>Filter</span>
+              </div>
+              <div>
+                <span>Sort: Recent</span>
+              </div>
+            </div>
+          </section>
+
+          <section className={styles.recipeGrid}>
+            {loading ? (
+              <p>Loading…</p>
+            ) : errMsg ? (
+              <ErrorMessage message={errMsg} />
+            ) : recipes.length === 0 ? (
+              <p>No recipes yet.</p>
+            ) : (
+              recipes.map((r) => <RecipeCard key={r._id || r.id} recipe={r} />)
+            )}
+          </section>
+
+          <section className={styles.pageSelector}>
+            <p>{showingText}</p>
+            <div className={styles.paginationContainer}>
+              <button
+                type="button"
+                onClick={() => goToPage(page - 1)}
+                disabled={page <= 1 || loading}
+                aria-label="Previous page"
+              >
+                <AiOutlineArrowLeft size="20px" color="#fff" />
+              </button>
+
+              <p aria-live="polite">{page}</p>
+
+              <button
+                type="button"
+                onClick={() => goToPage(page + 1)}
+                disabled={page >= totalPages || loading}
+                aria-label="Next page"
+              >
+                <AiOutlineArrowRight size="20px" color="#fff" />
               </button>
             </div>
-            <div>
-              <span>Filter</span>
-            </div>
-            <div>
-              <span>Sort: Recent</span>
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.recipeGrid}>
-          {loading ? (
-            <p>Loading…</p>
-          ) : errMsg ? (
-            <p style={{ color: "crimson" }}>{errMsg}</p>
-          ) : recipes.length === 0 ? (
-            <p>No recipes yet.</p>
-          ) : (
-            recipes.map((r) => <RecipeCard key={r._id || r.id} recipe={r} />)
-          )}
-        </section>
-
-        <section className={styles.pageSelector}>
-          <p>{showingText}</p>
-          <div className={styles.paginationContainer}>
-            <button
-              type="button"
-              onClick={() => goToPage(page - 1)}
-              disabled={page <= 1 || loading}
-              aria-label="Previous page"
-            >
-              <AiOutlineArrowLeft size="20px" color="#fff" />
-            </button>
-
-            <p aria-live="polite">{page}</p>
-
-            <button
-              type="button"
-              onClick={() => goToPage(page + 1)}
-              disabled={page >= totalPages || loading}
-              aria-label="Next page"
-            >
-              <AiOutlineArrowRight size="20px" color="#fff" />
-            </button>
-          </div>
-        </section>
-      </main>
-    </div>
+          </section>
+        </main>
+      </div>
+    </>
   );
 }

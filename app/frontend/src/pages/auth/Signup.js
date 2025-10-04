@@ -1,95 +1,144 @@
 import { useState } from "react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
-import NavbarSmall from "../../components/layout/NavbarSmall.js";
 
 import styles from "./Signup.module.css";
-import BurgerImg from "../../assets/images/welcomeImg.png";
+import { PROFILE_IMAGES } from "../../data/data.js";
+import ErrorBox from "../../components/UI/ErrorBox.js";
+import ErrorMessage from "../../components/UI/ErrorMessage.js";
 
 const initialStateValue = {
   username: "",
   email: "",
   password: "",
   confirmPassword: "",
+  profileImage: "/static/media/profile-1.63a59e2c2259d740b518.png",
 };
 
 export default function Signup() {
   const [formData, setFormData] = useState(initialStateValue);
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState([]);
+
+  const [errMsg, setErrMsg] = useState("");
+  const [validationErrors, setValidationErrors] = useState([]);
   const navigate = useNavigate();
 
-  const onChangeHandler = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevValue) => ({ ...prevValue, [name]: value }));
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setFormData((p) => ({ ...p, [name]: value }));
   };
 
-  const handleSignup = async (event) => {
+  const onImgClick = (value) => {
+    setFormData((p) => ({ ...p, profileImage: value }));
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
-    event.preventDefault();
-    const username = formData.username;
-    const email = formData.email;
-    const password = formData.password;
-    const confirmPassword = formData.confirmPassword;
+    setErrMsg("");
+    setValidationErrors([]);
+
+    const { username, email, password, confirmPassword, profileImage } =
+      formData;
+
+    if (password.length < 8) {
+      setValidationErrors((prev) => [
+        ...prev,
+        "Password must be at least 8 characters.",
+      ]);
+      setIsLoading(false);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setValidationErrors((prev) => [...prev, "Passwords do not match."]);
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const { data } = await axios.post(
+      await axios.post(
         "http://localhost:8000/auth/signup",
-        {
-          username,
-          email,
-          password,
-          confirmPassword,
-        },
-        { headers: "Content-Type: application/json" }
+        { username, email, password, confirmPassword, imageUrl: profileImage },
+        { headers: { "Content-Type": "application/json" } }
       );
-      if (data?.error) {
-        setErrors((prev) => [...prev, data.error]);
-        return;
-      }
 
       navigate("/auth/login");
-    } catch (error) {
-      const msg = error.message || "Login failed";
-      setErrors((prev) => [...prev, msg]);
-      console.error(error);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        if (!err.response) {
+          setErrMsg("Network error. Please try again.");
+          return;
+        }
+        const { status, data } = err.response;
+        console.log(status, data);
+
+        if (status === 422) {
+          const list = data?.errors ?? data?.validationsErrors ?? [];
+          const msgs = list.map((e) => e.msg || e.message || String(e));
+          setValidationErrors(msgs);
+          return;
+        }
+
+        setErrMsg(
+          data?.message || data?.error || err.message || "Something went wrong."
+        );
+      } else {
+        setErrMsg("Unexpected error.");
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.curvedCut} aria-hidden="true"></div>
-      <NavbarSmall />
-      <section className={styles.content}>
-        <div className={styles.signUpForm}>
-          <h3>Sign Up</h3>
-          <form method="POST" className={styles.signUpForm}>
-            <div className={styles.signUpForm__input}>
-              <input
-                type="text"
-                name="username"
-                id="username"
-                required
-                placeholder=" "
-                value={formData.username}
-                onChange={onChangeHandler}
-              />
-              <label htmlFor="username">Username</label>
-            </div>
-            <div className={styles.signUpForm__input}>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                required
-                placeholder=" "
-                value={formData.email}
-                onChange={onChangeHandler}
-              />
-              <label htmlFor="email">Email</label>
-            </div>
-            <div className={styles.signUpForm__input}>
+    <>
+      <title>Chef Bot - SignUp</title>
+
+      <div className={styles.signupPanel}>
+        <h1 className={styles.title}>Sign Up</h1>
+
+        {errMsg && <ErrorMessage message={errMsg} />}
+        {validationErrors.length > 0 && (
+          <ErrorBox>
+            <ul>
+              {validationErrors.map((msg, i) => (
+                <li key={i}>{msg}</li>
+              ))}
+            </ul>
+          </ErrorBox>
+        )}
+
+        <form className={styles.signupForm} onSubmit={handleSignup} noValidate>
+          <div className={styles.inputRow}>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              required
+              placeholder=" "
+              value={formData.username}
+              onChange={onChangeHandler}
+              autoComplete="username"
+            />
+            <label htmlFor="username">Username</label>
+          </div>
+
+          <div className={styles.inputRow}>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              required
+              placeholder=" "
+              value={formData.email}
+              onChange={onChangeHandler}
+              autoComplete="email"
+            />
+            <label htmlFor="email">Email</label>
+          </div>
+
+          <div className={styles.inlineInputs}>
+            <div className={styles.inputRow}>
               <input
                 type="password"
                 name="password"
@@ -98,10 +147,11 @@ export default function Signup() {
                 placeholder=" "
                 value={formData.password}
                 onChange={onChangeHandler}
+                autoComplete="new-password"
               />
               <label htmlFor="password">Password</label>
             </div>
-            <div className={styles.signUpForm__input}>
+            <div className={styles.inputRow}>
               <input
                 type="password"
                 name="confirmPassword"
@@ -110,22 +160,52 @@ export default function Signup() {
                 placeholder=" "
                 value={formData.confirmPassword}
                 onChange={onChangeHandler}
+                autoComplete="new-password"
               />
               <label htmlFor="confirmPassword">Confirm Password</label>
             </div>
-            <button type="button" onClick={handleSignup} disabled={isLoading}>
+          </div>
+
+          <div className={styles.profileGridWrap}>
+            <p className={styles.gridLabel}>Choose a profile image</p>
+            <div
+              className={styles.profileGrid}
+              role="group"
+              aria-label="Choose profile image"
+            >
+              {PROFILE_IMAGES.map((item) => {
+                const selected = item.src === formData.profileImage;
+                return (
+                  <button
+                    key={item.src}
+                    type="button"
+                    className={`${styles.profTile} ${
+                      selected ? styles.selected : ""
+                    }`}
+                    aria-pressed={selected}
+                    onClick={() => onImgClick(item.src)}
+                  >
+                    <img src={item.src} alt={item.alt} />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className={styles.formActions}>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={styles.signupSubmitBtn}
+            >
               {isLoading ? "Submitting..." : "Sign Up →"}
             </button>
-          </form>
-
-          <p>
-            Already got an account? <NavLink to="/auth/login">Sign In</NavLink>
-          </p>
-        </div>
-        <div className={styles.heroImage}>
-          <img src={BurgerImg} alt="Chef-Bot hero burger" />
-        </div>
-      </section>
-    </div>
+            <p className={styles.switchAuth}>
+              Already have an account? <NavLink to="/auth/login">Login</NavLink>
+            </p>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }

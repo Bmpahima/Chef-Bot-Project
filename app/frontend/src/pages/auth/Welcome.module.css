@@ -1,146 +1,50 @@
-.pageContainer {
-  position: relative;
-  min-height: 100vh;
-  background: var(--green-700);
-  font-family: "Barlow Condensed", sans-serif;
-}
-
-.curvedCut {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 62vw;
-  height: 100%;
-  background: var(--black-800);
-  clip-path: ellipse(80% 110% at 0% 50%);
-  z-index: 1;
-  pointer-events: none;
-  rotate: 180deg;
-}
-
-.navBar {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: flex-end;
-  gap: 1.5rem;
-  padding: 1.25rem 3rem;
-  font-weight: 700;
-}
-
-.navBar a {
-  color: #fff;
-  text-decoration: none;
-  opacity: 0.95;
-  letter-spacing: 2px;
-  font-size: 24px;
-  font-weight: 400;
-  transition: font-size 0.5s ease;
-}
-
-.navBar a:hover {
-  font-size: 26px;
-}
-
-.content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 80%;
-  margin: 0 clamp(10rem, 10vw, 12rem);
-  min-height: calc(100vh - 84px);
-}
-
 .heroCopy h1 {
-  font-size: clamp(4.5rem, 10vw, 12rem);
-  line-height: 0.92;
-  margin: 0 0 0.5rem;
   color: #fff;
+  font-size: clamp(64px, 10vw, 112px);
+  line-height: 0.92;
   letter-spacing: 0.5px;
+  margin: 0 0 0.6rem;
 }
 .heroCopy h3 {
   margin: 0 0 1rem;
   color: #e8f5e9;
-  font-size: clamp(1.6rem, 2.2vw, 2.6rem);
+  font-size: clamp(22px, 2.2vw, 34px);
   font-weight: 800;
 }
 .heroCopy p {
-  max-width: 60ch;
+  max-width: 62ch;
   color: #f1f1f1;
   opacity: 0.95;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.6rem;
   font-weight: 300;
-  font-size: clamp(1.1rem, 1.3rem, 1.5rem);
+  font-size: clamp(17px, 1.6vw, 20px);
 }
+
 .heroCopy button {
-  background: var(--black-800);
+  background: #161616;
   color: #fff;
-  font-size: clamp(1rem, 1.2vw, 1.25rem);
+  font-size: clamp(16px, 1.4vw, 18px);
   border: none;
-  padding: 0.95rem 1.4rem;
+  padding: 0.95rem 1.6rem;
   border-radius: 999px;
   font-weight: 700;
+  letter-spacing: 1.5px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
   cursor: pointer;
-  transition: transform 0.35s ease, background 0.2s ease;
+  transition: transform 0.28s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .heroCopy button:hover {
-  background: var(--black-700);
+  background: #1d1d1d;
   transform: translateY(-4px);
 }
-
-.heroImage {
-  position: relative;
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 380px;
+.heroCopy button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(93, 187, 99, 0.35), 0 10px 28px rgba(0, 0, 0, 0.32);
 }
 
-.heroImage img {
-  position: relative;
-  z-index: 1;
-  width: clamp(240px, 30vw, 480px);
-  transform: rotate(10deg);
-  height: auto;
-}
-
-@media (max-width: 1100px) {
-  .curvedCut {
-    width: 60vw;
-  }
-  .content {
-    gap: 2.5rem;
-  }
-
-  .heroImage img {
-    width: min(350px, 65vw);
-  }
-}
-
-@media (max-width: 900px) {
-  .content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2rem;
-    min-height: unset;
-  }
-  .heroImage {
-    order: -1;
-    align-self: center;
-  }
-  .curvedCut {
-    width: 60vw;
-    opacity: 0.96;
-  }
-  .heroImage img {
-    width: min(250px, 80vw);
-  }
-
+@media (max-width: 720px) {
   .heroCopy button {
-    font-size: 14px;
+    width: 100%;
+    font-size: 16px;
   }
 }

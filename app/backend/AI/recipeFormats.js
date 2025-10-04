@@ -64,7 +64,7 @@ Always respond with JSON in exactly this format:
   "cookTime": "X min"
 }
 
-Rules:
+IMPORTANT Rules:
 - Use only provided ingredients as the main components (plus pantry basics).
 - Scale ingredient amounts to requested servings.
 - Respect constraints as much as possible (diet, cuisine, difficulty, time).
@@ -138,7 +138,7 @@ Always respond with JSON in exactly this format:
   "cookTime": "X min"
 }
 
-Rules:
+IMPORTANT Rules:
 - Scale ingredient amounts to requested servings.
 - Respect constraints as much as possible (diet, cuisine, difficulty, time).
 - If constraints include "other" and cuisineOtherText is non-empty, add that label to cuisines.
@@ -188,6 +188,26 @@ Your job:
   "ingredients": ["tomato", "garlic", "onion", "basil", "olive oil", "spaghetti"]
 }
 `;
+
+export const systemPromptImageGen = (name, ingredients) => {
+  return `Futuristic, hyper-realistic editorial food photo of ${name} — show ONLY these ingredients: ${ingredients}.
+Square composition for web (no text). Minimal props, matte dark background.
+Futuristic plating with subtle neon highlights and chrome details.
+Soft natural key light + gentle rim light, shallow depth of field (bokeh).
+Keep it realistic and appetizing, no extra ingredients.
+`;
+};
+
+export const generatePathName = (name) => {
+  const nameSlug = name
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+  const dateSlug = new Date().toISOString().split(".")[0].replace(/[T:]/g, "-");
+
+  return `${nameSlug}-${dateSlug}`;
+};
 
 export function createUserPrompt(ingredients, constraints) {
   return `

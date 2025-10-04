@@ -1,0 +1,128 @@
+.navProfileWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.navProfileImg {
+  margin-left: 2rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--green-700), var(--green-900));
+  box-shadow: 0 0 0 2px var(--black-700) inset;
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  background-clip: padding-box;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.navProfileImgInner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.profileMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: clamp(180px, max-content, 360px);
+  max-width: 92vw;
+  background: var(--black-800);
+  color: #fff;
+  border: 1px solid var(--black-600);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  padding: 6px;
+  z-index: 1000;
+}
+
+.menuItem {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.menuItem:hover,
+.menuItem:focus {
+  background: var(--black-700);
+  outline: none;
+}
+
+.srOnly {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.profileMenu {
+  max-width: min(92vw, 360px);
+  width: max-content;
+}
+
+@media (max-width: 480px) {
+  .navProfileImg {
+    margin-left: 1rem;
+    width: 26px;
+    height: 26px;
+  }
+
+  .profileMenu {
+    padding: 4px;
+  }
+
+  .menuItem {
+    padding: 10px 12px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .navProfileImg {
+    width: 40px;
+    height: 40px;
+  }
+  .profileMenu {
+    min-width: 200px;
+    padding: 8px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .navProfileImg {
+    width: 44px;
+    height: 44px;
+  }
+  .profileMenu {
+    min-width: 220px;
+    max-width: 420px;
+  }
+}
+
+@media (pointer: coarse) {
+  .navProfileImg {
+    width: max(36px, 40px);
+    height: max(36px, 40px);
+  }
+  .menuItem {
+    padding: 12px 16px;
+  }
+}

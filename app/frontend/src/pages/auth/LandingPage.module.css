@@ -1,0 +1,109 @@
+.pageContainer {
+  position: relative;
+  min-height: 100vh;
+  background: radial-gradient(
+    1200px 900px at 15% 15%,
+    #2e7d32 0%,
+    #1e5f29 55%,
+    #174c22 100%
+  );
+  font-family: "Barlow Condensed", sans-serif;
+}
+
+.curvedCut {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: clamp(48vw, 62vw, 70vw);
+  background: linear-gradient(
+    185deg,
+    rgba(14, 14, 14, 0.95),
+    rgba(18, 18, 18, 0.92)
+  );
+  clip-path: ellipse(80% 110% at 0% 50%);
+  z-index: 1;
+  pointer-events: none;
+  rotate: 180deg;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr minmax(320px, 480px);
+  align-items: center;
+  gap: clamp(2rem, 4vw, 5rem);
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: clamp(24px, 4vw, 48px) clamp(16px, 5vw, 48px);
+  min-height: calc(100vh - 84px);
+}
+
+.heroImage {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.heroImage img {
+  width: clamp(220px, 22vw, 420px);
+  height: auto;
+  transform: rotate(8deg);
+  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.35));
+}
+
+@media (max-width: 1024px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 5vw, 36px);
+    min-height: unset;
+  }
+  .curvedCut {
+    width: 70vw;
+    opacity: 0.97;
+  }
+  .heroImage img {
+    transform: rotate(6deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .content {
+    padding: 24px clamp(12px, 4.5vw, 24px);
+  }
+  .curvedCut {
+    width: 80vw;
+    clip-path: ellipse(95% 115% at 0% 50%);
+  }
+  .heroImage img {
+    transform: none;
+    width: clamp(200px, 62vw, 360px);
+  }
+  .formActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .loginForm button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .title {
+    letter-spacing: 1px;
+  }
+  .inputRow input {
+    font-size: 16px;
+  }
+  .inputRow label {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loginForm button,
+  .heroImage img {
+    transition: none;
+    transform: none;
+  }
+}

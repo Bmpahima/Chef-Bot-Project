@@ -172,28 +172,108 @@
   justify-content: center;
 }
 
-.generateBtn {
-  cursor: pointer;
-  padding: 12px clamp(24px, 20vw, 60px);
-  font-size: 2.4rem;
-  font-weight: 500;
-  transition: 0.8s;
-  background-size: 280% auto;
-  background-image: linear-gradient(
-    325deg,
-    var(--green-200) 0%,
-    var(--green-400) 55%,
-    var(--green-400) 90%
-  );
-  border: none;
-  border-radius: 999px;
-  color: #fff;
-  box-shadow: 0px 0px 20px var(--green-300), 0px 5px 5px -1px var(--green-400),
-    inset 4px 4px 8px var(--green-600), inset -4px -4px 8px var(--green-400);
+@media (max-width: 1100px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 0.8rem;
+  }
+  .imageUploadContainer,
+  .detectedIng,
+  .prefContainer {
+    grid-area: auto;
+  }
 }
 
-.generateBtn:is(:hover, :active) {
-  transform: translateY(-2px);
-  box-shadow: 0px 0px 30px var(--green-300), 0px 5px 5px -1px var(--green-400),
-    inset 4px 4px 8px var(--green-600), inset -4px -4px 8px var(--green-400);
+@media (max-width: 720px) {
+  .container > div {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 720px) {
+  .dropzone,
+  .spinnerContainer {
+    min-height: 160px;
+  }
+  .dropzoneMessage {
+    font-size: 18px;
+    text-align: center;
+    padding: 0 8px;
+  }
+}
+@media (max-width: 440px) {
+  .dropzone,
+  .spinnerContainer {
+    min-height: 140px;
+  }
+  .dropzoneMessage {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  .detectButton {
+    font-size: 20px;
+  }
+  .detectButton span {
+    padding: 10px 16px;
+  }
+}
+@media (max-width: 440px) {
+  .detectButton {
+    font-size: 18px;
+  }
+  .detectButton span {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .ingList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .addButton {
+    font-size: 18px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .prefContainer {
+    overflow: auto;
+  }
+}
+@media (max-width: 720px) {
+  .prefContainer h2 {
+    font-size: 22px;
+  }
+}
+
+.submittion {
+  margin: 10px 0 24px;
+}
+
+@media (max-width: 600px) {
+  .generateBtn {
+    font-size: 1.6rem;
+    padding: 10px 24px;
+  }
+}
+
+@media (max-width: 720px) {
+  .imageUploadContainer h2,
+  .detectedIng h2,
+  .prefContainer h2 {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .errorFileMessage {
+    font-size: 13px;
+  }
 }

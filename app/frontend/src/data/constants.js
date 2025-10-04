@@ -53,3 +53,37 @@ export const INITIAL_CONSTRAINTS = {
   cuisineOtherText: "",
   flavors: ["comfort"],
 };
+
+export const DEFUALT_PREFERENCES = {
+  cuisine: ["other"],
+  difficulty: "easy",
+  diet: [],
+  flavors: ["comfort"],
+};
+
+export const INGREDIENTS_UNITS = [
+  "g",
+  "kg",
+  "ml",
+  "l",
+  "tsp",
+  "tbsp",
+  "cup",
+  "piece",
+  "pcs",
+];
+
+export const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];

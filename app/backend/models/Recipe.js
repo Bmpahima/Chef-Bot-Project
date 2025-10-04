@@ -1,41 +1,20 @@
 import mongoose, { Schema } from "mongoose";
-
-const CUISINE_ENUM = [
-  "italian",
-  "french",
-  "american",
-  "asian",
-  "indian",
-  "mexican",
-  "middle-eastern",
-  "mediterranean",
-  "israeli",
-  "other",
-];
-
-const FLAVORS_ENUM = [
-  "spicy",
-  "sweet",
-  "salty",
-  "savory",
-  "sour",
-  "bitter",
-  "fresh",
-  "comfort",
-  "other",
-];
+import {
+  CUISINE_ENUM,
+  FLAVORS_ENUM,
+  UNIT_ENUM,
+  DIFFICULTY_ENUM,
+} from "../util/constants.js";
 
 const ingredientSchema = new Schema({
   ingredientName: { type: String, required: true, trim: true },
   amount: { type: Number, required: true, min: 0 },
   unit: {
     type: String,
-    enum: ["g", "kg", "ml", "l", "tsp", "tbsp", "cup", "piece", "pcs"],
+    enum: UNIT_ENUM,
     required: true,
   },
 });
-
-const DIFFICULTY_ENUM = ["easy", "medium", "hard"];
 
 const recipeSchema = new Schema(
   {

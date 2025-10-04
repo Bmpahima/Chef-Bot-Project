@@ -5,3 +5,419 @@
   color: #fff;
   font-family: "Barlow Condensed", sans-serif;
 }
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px clamp(16px, 4vw, 32px) 64px;
+  display: grid;
+  grid-template-columns: 280px 1fr 1fr;
+  grid-template-areas:
+    "profile details about"
+    "profile   recent  recent";
+  gap: 1.25rem;
+}
+
+.container > div {
+  position: relative;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+  padding: 28px 40px !important;
+  overflow: hidden;
+}
+
+.mainProfileContainer {
+  grid-area: profile;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.mainProfileImgWrap {
+  width: 120px;
+  height: 120px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--green-900);
+  box-shadow: 0 0 10px var(--green-700);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.profileImg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.mainProfileContainer h3 {
+  margin: 6px 0 0;
+  font-weight: 500;
+  font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+}
+
+.mainProfileContainer h5 {
+  margin: 0;
+  font-weight: 300;
+  color: var(--gray-300);
+  font-size: clamp(1.1rem, 2.1vw, 1.2rem);
+}
+
+.mainProfileDits {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 10px 0 14px;
+}
+
+.dits {
+  display: grid;
+  place-items: center;
+  gap: 2px;
+}
+
+.dits strong {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  margin: 0;
+}
+.dits p {
+  font-weight: 300;
+  color: var(--gray-300);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.dits + .dits {
+  position: relative;
+}
+
+.dits + .dits::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mainEditButton,
+.profileSaveButton {
+  cursor: pointer;
+  padding: 8px 14px;
+  font-size: 0.95rem;
+  color: var(--green-100);
+  background: linear-gradient(180deg, var(--green-900), var(--green-950));
+  border: 1px solid var(--green-800);
+  border-radius: 10px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s;
+  margin-top: auto;
+}
+.mainEditButton:hover,
+.profileSaveButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+  border-color: var(--green-700);
+}
+
+.quickAction {
+  width: 100%;
+  text-align: left;
+  margin: 24px 0 0;
+}
+
+.quickAction h4 {
+  font-weight: 600;
+  font-size: 22px;
+}
+
+.quickItem {
+  background: var(--black-700);
+  border: 1px solid var(--black-600);
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  padding: 6px 8px;
+  margin: 0 0 8px;
+  width: 100%;
+  text-align: left;
+  transition: filter 0.5s ease, transform 0.5s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.quickItem:is(:hover, :active) {
+  filter: brightness(1.2);
+  transform: translateY(-1.5px);
+}
+
+.quickItem p {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--gray-300);
+}
+
+.bottomMenuContainer {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.bottomMenuContainer button {
+  color: rgb(255, 44, 44);
+  font-size: 18px;
+  background: rgba(185, 37, 37, 0.2);
+  border: 1px solid rgba(255, 44, 44, 0.6);
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  padding: 6px 10px;
+  margin: 0 0 8px;
+  text-align: left;
+  transition: filter 0.5s ease, transform 0.5s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profileDetailsContainer {
+  grid-area: details;
+  min-height: 240px;
+  padding: 28px 40px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profileDetailsContainer h3 {
+  margin: 0 0 10px;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2.3vw, 1.35rem);
+}
+
+.detailsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px 16px;
+}
+
+.textInput {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.textInput label {
+  color: var(--gray-300);
+  font-weight: 300;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.textInput input {
+  width: 100%;
+  height: 42px;
+  background-color: var(--black-700);
+  border: 1px solid var(--black-600);
+  color: #fff;
+  outline: 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.textInput input::placeholder {
+  color: var(--gray-500);
+}
+
+.textInput input:focus-visible {
+  border-color: var(--green-700);
+}
+
+.profileSaveButton {
+  align-self: center;
+  margin-top: 6px;
+  padding: 10px 16px;
+}
+
+.aboutMeContainer {
+  grid-area: about;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutMeContainer h3 {
+  margin: 0 0 10px;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2.3vw, 1.35rem);
+}
+
+.aboutMeContainer h5 {
+  font-weight: 300;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--gray-300);
+}
+
+.aboutMeContainer form {
+  display: flex;
+  flex-direction: column;
+}
+
+.cuisineContainer {
+  margin: 0 0 8px;
+}
+
+.cuisineOptions {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 8px;
+}
+
+.cuisineOptions label,
+.dietsOptions label {
+  font-weight: 300;
+  color: var(--gray-300);
+}
+
+.cuisineOptions input,
+.dietsOptions input {
+  margin-right: 10px;
+  accent-color: var(--green-500);
+  border: none;
+}
+
+.flavorsContainer {
+  grid-area: "flavors";
+  margin: 0 0 8px;
+}
+
+.flavorBtn {
+  background: var(--black-700);
+  border: 1px solid var(--black-500);
+  border-radius: 10px;
+  padding: 6px 8px;
+  margin: 2px;
+  font-size: 14px;
+  color: #fff;
+  transition: filter 0.5s ease, transform 0.5s ease;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+}
+
+.flavorBtn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-1.5px);
+}
+
+.dietsDiffWrap {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: 0 0 8px;
+}
+
+.dietsContainer {
+  grid-area: "diets";
+}
+
+.dietsContainer > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.diffContainer {
+  grid-area: "difficulty";
+  display: flex;
+  flex-direction: column;
+}
+
+.diffOptions {
+  width: 100%;
+  background-color: var(--black-700);
+  border: 1px solid var(--black-600);
+  color: #fff;
+  outline: 0;
+  padding: 6px 8px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.prefLabelHeader {
+  font-weight: 300;
+  font-size: 0.95rem;
+  color: var(--gray-300);
+  margin: 0 0 4px;
+}
+
+.recentRecipesContainer {
+  grid-area: recent;
+  min-height: 240px;
+}
+
+.blockHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.blockHead h3 {
+  margin: 0 0 10px;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2.3vw, 1.35rem);
+}
+
+.blockHead a {
+  color: var(--gray-300);
+  text-decoration: none;
+  font-weight: 300;
+  border: 1px solid var(--black-700);
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  transition: background 0.2s ease;
+}
+
+.recentList {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.recipeCard {
+  position: relative;
+  height: 180px;
+  border-radius: 16px;
+  background: var(--black-800);
+  /* background: var(--black-800) url("") center/cover no-repeat; */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.recipeCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recipeCard span {
+  position: absolute;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 14px;
+}

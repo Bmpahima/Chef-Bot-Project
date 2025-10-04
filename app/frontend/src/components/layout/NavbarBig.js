@@ -1,10 +1,13 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 
 import styles from "./NavbarBig.module.css";
+import { useUser } from "../../store/userContext";
+import ImageDropdown from "./ImageDropdown";
 
 export default function NavbarBig() {
   const navigate = useNavigate();
   const location = useLocation();
+  const userCtx = useUser();
 
   const setPageTitle = () => {
     const p = location.pathname;
@@ -56,16 +59,22 @@ export default function NavbarBig() {
           >
             Recipes
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to={"/app/profile"}
             className={({ isActive }) =>
               isActive ? styles.activeOption : undefined
             }
           >
             Profile
-          </NavLink>
+          </NavLink> */}
         </div>
-        <div className={styles.navProfileImg} aria-hidden="true"></div>
+        <ImageDropdown
+          src={userCtx.user.profileImg}
+          username={userCtx.user.username}
+        />
+        {/* <div className={styles.navProfileImg} aria-hidden="true">
+          <img src={userCtx.user.profileImg} alt="User Profile" />
+        </div> */}
       </nav>
     </header>
   );

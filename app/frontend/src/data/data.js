@@ -1,5 +1,9 @@
-// recipes.seed.js
-// Demo data matching your Recipe schema (ESM)
+import profile1 from "../assets/images/profile/profile-1.png";
+import profile2 from "../assets/images/profile/profile-2.png";
+import profile3 from "../assets/images/profile/profile-3.png";
+import profile4 from "../assets/images/profile/profile-4.png";
+import profile5 from "../assets/images/profile/profile-5.png";
+import profile6 from "../assets/images/profile/profile-6.png";
 
 const DUMMY = [
   {
@@ -257,6 +261,33 @@ const DUMMY = [
   },
 ];
 
+export const defaultRecipe = {
+  name: "Cheakpea Salad",
+  badges: ["Italian", "Easy", "Vegan", "Kosher"],
+  servings: 4,
+  prepTime: "15 min",
+  cookTime: "10 min",
+  ingredients: [
+    { ingredientName: "cherry tomatoes", amount: 400, unit: "g" },
+    { ingredientName: "cucumber", amount: 200, unit: "g" },
+    { ingredientName: "red onion", amount: 100, unit: "g" },
+    { ingredientName: "feta cheese", amount: 50, unit: "g" },
+    { ingredientName: "chickpeas", amount: 50, unit: "g" },
+    { ingredientName: "olive oil", amount: 2, unit: "tsbp" },
+  ],
+  instructions: (
+    <span>
+      1. Rinse and drain the checkpeas.
+      <br />
+      2. Dice the cherry tomatoes, cucumber and red onion.
+      <br />
+      3. Combine all ingerdients in a large bowl.
+      <br />
+      4. Drizzle with olive oil and toss gently to combine.
+    </span>
+  ),
+};
+
 export const dummyIngredients = [
   "Tomatoes",
   "Onions",
@@ -271,3 +302,30 @@ export const dummyIngredients = [
 ];
 
 export default DUMMY;
+
+export const PROFILE_IMAGES = [
+  {
+    src: profile1,
+    alt: "profile-image-1",
+  },
+  {
+    src: profile2,
+    alt: "profile-image-2",
+  },
+  {
+    src: profile3,
+    alt: "profile-image-3",
+  },
+  {
+    src: profile4,
+    alt: "profile-image-4",
+  },
+  {
+    src: profile5,
+    alt: "profile-image-5",
+  },
+  {
+    src: profile6,
+    alt: "profile-image-6",
+  },
+];

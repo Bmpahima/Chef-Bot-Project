@@ -9,25 +9,44 @@ import Signup from "./auth/Signup.js";
 import PrivateRoutes from "./app/PrivateRoute.js";
 import Dashboard from "./app/Dashboard.js";
 import RecipesPage from "./app/recipes/RecipesPage.js";
-import RecipeDetail from "./app/recipes/RecipeDetail.js";
+import RecipeDetail, {
+  loader as RecipeByIdLoader,
+} from "./app/recipes/RecipeDetail.js";
 import RecipeGenerator from "./app/generateRecipe/RecipeGenerator.js";
 import UploadImage from "./app/generateRecipe/create-options/UploadImage.js";
 import ManualEntry from "./app/generateRecipe/create-options/ManualEntry.js";
 import AISuggestions from "./app/generateRecipe/create-options/AISuggestions.js";
-import Profile from "./settings/Profile.js";
+import Profile, { loader as ProfileLoader } from "./settings/Profile.js";
 import RecipePreview from "./app/generateRecipe/RecipePreview.js";
 import { UserProvider } from "../store/userContext.js";
+import EditRecipe from "./app/recipes/EditRecipe.js";
+import ErrorRecipePage from "./app/recipes/ErrorRecipePage.js";
+import ResetPasswordModal from "./auth/ResetPasswordModal.js";
+import LandingPage from "./auth/LandingPage.js";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Welcome />,
-  },
-  {
-    path: "auth",
+    element: <LandingPage />,
     children: [
-      { path: "login", element: <Login /> },
-      { path: "signup", element: <Signup /> },
+      {
+        index: true,
+        element: <Welcome />,
+      },
+      {
+        path: "auth",
+        children: [
+          {
+            path: "login",
+            element: <Login />,
+            children: [
+              { index: true, element: null },
+              { path: "reset-password", element: <ResetPasswordModal /> },
+            ],
+          },
+          { path: "signup", element: <Signup /> },
+        ],
+      },
     ],
   },
   {
@@ -41,7 +60,25 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="all" replace /> },
           { path: "all", element: <RecipesPage /> },
-          { path: ":id", element: <RecipeDetail /> },
+          {
+            path: ":id",
+            id: "recipe",
+            loader: RecipeByIdLoader,
+            shouldRevalidate: ({
+              currentParams,
+              nextParams,
+              currentUrl,
+              nextUrl,
+            }) =>
+              currentParams.id !== nextParams.id ||
+              currentUrl.pathname !== nextUrl.pathname,
+
+            children: [
+              { index: true, element: <RecipeDetail /> },
+              { path: "edit", element: <EditRecipe /> },
+            ],
+            errorElement: <ErrorRecipePage />,
+          },
         ],
       },
       {
@@ -61,6 +98,7 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+        loader: ProfileLoader,
       },
     ],
   },

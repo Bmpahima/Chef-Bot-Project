@@ -38,34 +38,6 @@
   font-weight: 400;
 }
 
-.dropzone {
-  flex: 1;
-  min-height: 200px;
-  width: 100%;
-  background-color: var(--black-800);
-  border: 2px dashed var(--black-500);
-  border-radius: 12px;
-  margin: 0 0 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: filter 0.5s ease, border 0.5s ease;
-}
-
-.dropzone:hover {
-  filter: brightness(1.5);
-  border: 2px dashed #fff;
-}
-
-.dropzoneMessage {
-  font-size: 24px;
-}
-
-.errorFileMessage {
-  font-size: 14px;
-  margin-bottom: 16px;
-}
-
 .detectButton {
   margin-top: auto;
   align-items: center;
@@ -161,28 +133,58 @@
   justify-content: center;
 }
 
-.generateBtn {
-  cursor: pointer;
-  padding: 12px clamp(24px, 20vw, 60px);
-  font-size: 2.4rem;
-  font-weight: 500;
-  transition: 0.8s;
-  background-size: 280% auto;
-  background-image: linear-gradient(
-    325deg,
-    var(--green-200) 0%,
-    var(--green-400) 55%,
-    var(--green-400) 90%
-  );
-  border: none;
-  border-radius: 999px;
-  color: #fff;
-  box-shadow: 0px 0px 20px var(--green-300), 0px 5px 5px -1px var(--green-400),
-    inset 4px 4px 8px var(--green-600), inset -4px -4px 8px var(--green-400);
+@media (max-width: 1100px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 0.8rem;
+  }
+  .detectedIng,
+  .prefContainer {
+    grid-area: auto;
+  }
 }
 
-.generateBtn:is(:hover, :active) {
-  transform: translateY(-2px);
-  box-shadow: 0px 0px 30px var(--green-300), 0px 5px 5px -1px var(--green-400),
-    inset 4px 4px 8px var(--green-600), inset -4px -4px 8px var(--green-400);
+@media (max-width: 900px) {
+  .container > div {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .ingList {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+    column-gap: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .detectedIng h2,
+  .prefContainer h2 {
+    font-size: 24px;
+  }
+}
+@media (max-width: 520px) {
+  .detectedIng h2,
+  .prefContainer h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 720px) {
+  .addButton {
+    font-size: 18px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .prefContainer {
+    overflow: auto;
+  }
+}
+
+.submittion {
+  margin: 10px 0 24px;
 }

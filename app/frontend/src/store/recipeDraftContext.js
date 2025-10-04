@@ -40,10 +40,13 @@ export function RecipeDraftProvider({ children }) {
     } catch {}
   }, []);
 
+  const hasDraft = !!recipe?.name;
+
   useEffect(() => {
-    if (recipe) sessionStorage.setItem("recipe_draft", JSON.stringify(recipe));
+    if (hasDraft)
+      sessionStorage.setItem("recipe_draft", JSON.stringify(recipe));
     else sessionStorage.removeItem("recipe_draft");
-  }, [recipe]);
+  }, [hasDraft, recipe]);
 
   const saveDraft = (draft) => {
     setRecipe({ ...INITIAL_RECIPE, ...draft });
@@ -69,7 +72,10 @@ export function RecipeDraftProvider({ children }) {
       }
     } catch (err) {
       return {
-        error: "Failed to save draft, please try again.",
+        error:
+          err.response?.data ||
+          err.message ||
+          "Failed to save draft, please try again.",
       };
     }
   }, [recipe]);

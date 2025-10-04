@@ -15,7 +15,6 @@ const app = express();
 
 dotenv.config({ override: true });
 
-// TODO: 18/09/25
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 console.log(path.join(__dirname, "images"));
@@ -32,14 +31,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-mongoose
-  .connect(
-    `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`
-  )
-  .then(() => {
-    app.listen(8000, () => {
-      console.log(
-        "App is listening at port 8000 and connected to a MongoDB database."
-      );
-    });
+mongoose.connect(`${process.env.MONGODB_URI}`).then(() => {
+  app.listen(8000, () => {
+    console.log(
+      "App is listening at port 8000 and connected to a MongoDB database."
+    );
   });
+});

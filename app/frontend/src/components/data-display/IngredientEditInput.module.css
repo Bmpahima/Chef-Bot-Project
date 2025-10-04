@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr;
+  column-gap: 8px;
+}
+
+.ingName,
+.ingAmount,
+.ingUnit {
+  width: 100%;
+  background-color: var(--black-700);
+  border: 1px solid var(--black-600);
+  color: #fff;
+  outline: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}

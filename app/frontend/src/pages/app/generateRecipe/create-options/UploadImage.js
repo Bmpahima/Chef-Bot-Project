@@ -2,6 +2,7 @@ import { useDropzone } from "react-dropzone";
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
+import axios from "axios";
 
 import styles from "./UploadImage.module.css";
 import IngredientItem from "../../../../components/data-display/IngredientItem";
@@ -9,6 +10,10 @@ import PreferencesForm from "../../../../components/data-display/PreferencesForm
 import { appAPI } from "../../../../http/api";
 import { INITIAL_CONSTRAINTS } from "../../../../data/constants.js";
 import { useDraftRecipe } from "../../../../store/recipeDraftContext.js";
+import ErrorMessage from "../../../../components/UI/ErrorMessage.js";
+import ErrorBox from "../../../../components/UI/ErrorBox.js";
+import GlowingButton from "../../../../components/UI/GlowingButton.js";
+import { useUser } from "../../../../store/userContext.js";
 
 export default function UploadImage() {
   const [imageFile, setImageFile] = useState(null);
@@ -16,8 +21,12 @@ export default function UploadImage() {
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [isGenLoading, setIsGenLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [preferences, setPreferences] = useState(INITIAL_CONSTRAINTS);
-
+  const [validationErrors, setValidationErrors] = useState([]);
+  const userCtx = useUser();
+  const [preferences, setPreferences] = useState({
+    ...INITIAL_CONSTRAINTS,
+    ...userCtx.user.defaultPreferences,
+  });
   const draftCtx = useDraftRecipe();
   const navigate = useNavigate();
 
@@ -41,11 +50,13 @@ export default function UploadImage() {
 
   const getIngredientsByImage = async () => {
     if (!imageFile) {
-      setErrorMsg((prev) => ({ ...prev, image: "Select an image" }));
+      setErrorMsg("Select an image.");
       return;
     }
     try {
       setIsImageLoading(true);
+      setErrorMsg("");
+      setValidationErrors([]);
       const fd = new FormData();
       fd.append("image", imageFile);
 
@@ -56,7 +67,6 @@ export default function UploadImage() {
         setErrorMsg("Error in Generating Ingredients: " + data.error);
         return;
       }
-      console.log(data.message);
       setIngredients((prev) => {
         if (prev.length === 1 && prev[0] === "") return data.ingredients;
         else {
@@ -64,7 +74,8 @@ export default function UploadImage() {
         }
       });
     } catch (err) {
-      setErrorMsg("Error in Generating Ingredients: " + err.message);
+      const errorMessage = err.response?.data || err.message || "Unexpected";
+      setErrorMsg("Error in Generating Ingredients: " + errorMessage);
     } finally {
       setIsImageLoading(false);
     }
@@ -73,6 +84,8 @@ export default function UploadImage() {
   const onGenerate = async () => {
     try {
       setIsGenLoading(true);
+      setErrorMsg("");
+      setValidationErrors([]);
       const { data } = await appAPI.post("/image-generate", {
         ingredients: ingredients.filter((i) => i !== ""),
         constraints: preferences,
@@ -83,11 +96,30 @@ export default function UploadImage() {
         return;
       }
 
-      console.log(data.recipe);
       draftCtx.saveDraft(data.recipe);
       navigate("/app/preview");
     } catch (err) {
-      setErrorMsg("Error in Generating Ingredients: " + err.message);
+      if (axios.isAxiosError(err)) {
+        if (!err.response) {
+          setErrorMsg("Network error. Please try again.");
+          return;
+        }
+        const { status, data } = err.response;
+        console.log(status, data);
+
+        if (status === 422) {
+          const list = data?.errors ?? data?.validationsErrors ?? [];
+          const msgs = list.map((e) => e.msg || e.message || String(e));
+          setValidationErrors(msgs);
+          return;
+        }
+
+        setErrorMsg(
+          data?.message || data?.error || err.message || "Something went wrong."
+        );
+      } else {
+        setErrorMsg("Unexpected error.");
+      }
     } finally {
       setIsGenLoading(false);
     }
@@ -122,6 +154,17 @@ export default function UploadImage() {
 
   return (
     <>
+      {errorMsg && <ErrorMessage message={errorMsg} />}
+      {validationErrors.length > 0 && (
+        <ErrorBox>
+          <ul>
+            {validationErrors.map((msg, i) => (
+              <li key={i}>{msg}</li>
+            ))}
+          </ul>
+        </ErrorBox>
+      )}
+
       <div className={styles.container}>
         <div className={styles.imageUploadContainer}>
           <h2>Upload a photo of ingredients</h2>
@@ -186,14 +229,13 @@ export default function UploadImage() {
         </div>
       </div>
       <div className={styles.submittion}>
-        <button
+        <GlowingButton
           type="button"
-          className={styles.generateBtn}
           onClick={onGenerate}
           disabled={isGenLoading}
         >
           {isGenLoading ? "Generating a Recipe..." : "Generate"}
-        </button>
+        </GlowingButton>
       </div>
     </>
   );

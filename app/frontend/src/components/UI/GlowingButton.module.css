@@ -1,0 +1,48 @@
+.generateBtn {
+  cursor: pointer;
+  padding: 12px clamp(24px, 20vw, 60px);
+  font-size: 2.4rem;
+  font-weight: 500;
+  transition: 0.8s;
+  background-size: 280% auto;
+  background-image: linear-gradient(
+    325deg,
+    var(--green-200) 0%,
+    var(--green-400) 55%,
+    var(--green-400) 90%
+  );
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  box-shadow: 0px 0px 20px var(--green-300), 0px 5px 5px -1px var(--green-400),
+    inset 4px 4px 8px var(--green-600), inset -4px -4px 8px var(--green-400);
+}
+
+.generateBtn:is(:hover, :active) {
+  transform: translateY(-2px);
+  box-shadow: 0px 0px 30px var(--green-300), 0px 5px 5px -1px var(--green-400),
+    inset 4px 4px 8px var(--green-600), inset -4px -4px 8px var(--green-400);
+}
+
+@media (max-width: 900px) {
+  .generateBtn {
+    font-size: 2rem;
+    padding: 12px clamp(20px, 16vw, 48px);
+  }
+}
+
+@media (max-width: 600px) {
+  .generateBtn {
+    font-size: 1.6rem;
+    padding: 10px 24px;
+  }
+}
+
+@media (max-width: 400px) {
+  .generateBtn {
+    font-size: 1.4rem;
+    padding: 10px 16px;
+    width: 100%;
+    max-width: 420px;
+  }
+}
