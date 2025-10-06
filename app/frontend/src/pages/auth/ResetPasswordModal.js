@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { PiChefHatFill } from "react-icons/pi";
@@ -9,6 +9,7 @@ import styles from "./ResetPasswordModal.module.css";
 import { authAPI } from "../../http/api";
 import ErrorBox from "../../components/UI/ErrorBox.js";
 import ErrorMessage from "../../components/UI/ErrorMessage.js";
+import ModalLayout from "../../components/layout/ModalLayout.js";
 
 const RESEND_COOLDOWN_SEC = 60;
 
@@ -37,31 +38,11 @@ export default function ResetPasswordModal() {
   const codeInputRef = useRef(null);
   const passInputRef = useRef(null);
 
-  const closeModal = useCallback(() => {
-    navigate("..", { relative: "path", replace: true });
-  }, [navigate]);
-
   useEffect(() => {
     if (cooldown <= 0) return;
     const t = setInterval(() => setCooldown((s) => s - 1), 1000);
     return () => clearInterval(t);
   }, [cooldown]);
-
-  useEffect(() => {
-    function onKey(e) {
-      if (e.key === "Escape") closeModal();
-    }
-    function onDown(e) {
-      const card = document.getElementById("reset-card");
-      if (card && !card.contains(e.target)) closeModal();
-    }
-    document.addEventListener("keydown", onKey);
-    document.addEventListener("mousedown", onDown);
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.removeEventListener("mousedown", onDown);
-    };
-  }, [closeModal]);
 
   useEffect(() => {
     if (step === "email") emailInputRef.current?.focus();
@@ -226,217 +207,216 @@ export default function ResetPasswordModal() {
   return (
     <>
       <title>Forgot Password?</title>
-      <div
-        className={styles.modalOverlay}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="reset-title"
-      >
-        <div id="reset-card" className={styles.modalCard}>
-          {/* Header */}
-          <div className={styles.modalHeader}>
-            <div className={styles.iconContainer} aria-hidden="true">
-              <PiChefHatFill size={22} color="#fff" />
-            </div>
-            <h1 id="reset-title">Reset Password</h1>
+      <ModalLayout>
+        {/* Header */}
+        <div className={styles.modalHeader}>
+          <div className={styles.iconContainer} aria-hidden="true">
+            <PiChefHatFill size={22} color="#fff" />
           </div>
+          <h1 id="reset-title">Reset Password</h1>
+        </div>
 
-          <p className={styles.subHeader}>
-            {step === "email" && "Enter your email to receive a 6-digit code."}
-            {step === "code" &&
-              "We sent a 6-digit code to your email. Enter it below."}
-            {step === "password" && "Set a new password for your account."}
-          </p>
+        <p className={styles.subHeader}>
+          {step === "email" && "Enter your email to receive a 6-digit code."}
+          {step === "code" &&
+            "We sent a 6-digit code to your email. Enter it below."}
+          {step === "password" && "Set a new password for your account."}
+        </p>
 
-          {step === "email" && (
-            <form className={styles.resetForm} onSubmit={handleRequest}>
-              <label htmlFor="rp-email">Email Address</label>
-              <div className={styles.inputWrap}>
-                <CiMail className={styles.icon} aria-hidden="true" />
-                <input
-                  id="rp-email"
-                  ref={emailInputRef}
-                  type="email"
-                  placeholder="chef@example.com"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
+        {step === "email" && (
+          <form className={styles.resetForm} onSubmit={handleRequest}>
+            <label htmlFor="rp-email">Email Address</label>
+            <div className={styles.inputWrap}>
+              <CiMail className={styles.icon} aria-hidden="true" />
+              <input
+                id="rp-email"
+                ref={emailInputRef}
+                type="email"
+                placeholder="chef@example.com"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-              {err && <ErrorMessage message={err} />}
-              {validationErrors.length > 0 && (
-                <ErrorBox>
-                  <ul>
-                    {validationErrors.map((msg, i) => (
-                      <li key={i}>{msg}</li>
-                    ))}
-                  </ul>
-                </ErrorBox>
-              )}
+            {err && <ErrorMessage message={err} />}
+            {validationErrors.length > 0 && (
+              <ErrorBox>
+                <ul>
+                  {validationErrors.map((msg, i) => (
+                    <li key={i}>{msg}</li>
+                  ))}
+                </ul>
+              </ErrorBox>
+            )}
 
-              <button
-                type="submit"
-                className={styles.resetBtn}
-                disabled={loading || !email}
-              >
-                {loading ? "Sending..." : "Send code"}
-              </button>
+            <button
+              type="submit"
+              className={styles.resetBtn}
+              disabled={loading || !email}
+            >
+              {loading ? "Sending..." : "Send code"}
+            </button>
+            <button
+              type="button"
+              className={styles.cancelBtn}
+              onClick={() => {
+                navigate("..", { relative: "path", replace: true });
+              }}
+            >
+              Cancel
+            </button>
+          </form>
+        )}
+
+        {step === "code" && (
+          <form className={styles.resetForm} onSubmit={handleVerify}>
+            <label htmlFor="rp-code">Verification Code</label>
+            <div className={styles.inputWrap}>
+              <input
+                id="rp-code"
+                ref={codeInputRef}
+                type="text"
+                inputMode="numeric"
+                pattern="\d{6}"
+                maxLength={6}
+                placeholder="123456"
+                required
+                value={code}
+                onPaste={onPasteCode}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+                autoComplete="one-time-code"
+              />
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: "4px 0 10px",
+              }}
+            >
+              <small style={{ color: "var(--gray-300)" }}>
+                {attemptsInfo ? attemptsInfo : "\u00A0"}
+              </small>
               <button
                 type="button"
-                className={styles.cancelBtn}
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-            </form>
-          )}
-
-          {step === "code" && (
-            <form className={styles.resetForm} onSubmit={handleVerify}>
-              <label htmlFor="rp-code">Verification Code</label>
-              <div className={styles.inputWrap}>
-                <input
-                  id="rp-code"
-                  ref={codeInputRef}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="\d{6}"
-                  maxLength={6}
-                  placeholder="123456"
-                  required
-                  value={code}
-                  onPaste={onPasteCode}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                  autoComplete="one-time-code"
-                />
-              </div>
-
-              <div
+                onClick={handleResend}
+                disabled={!canResend || loading}
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  margin: "4px 0 10px",
+                  background: "transparent",
+                  border: 0,
+                  color: canResend ? "var(--green-300)" : "var(--gray-400)",
+                  cursor: canResend ? "pointer" : "not-allowed",
+                  padding: 0,
                 }}
               >
-                <small style={{ color: "var(--gray-300)" }}>
-                  {attemptsInfo ? attemptsInfo : "\u00A0"}
-                </small>
-                <button
-                  type="button"
-                  onClick={handleResend}
-                  disabled={!canResend || loading}
-                  style={{
-                    background: "transparent",
-                    border: 0,
-                    color: canResend ? "var(--green-300)" : "var(--gray-400)",
-                    cursor: canResend ? "pointer" : "not-allowed",
-                    padding: 0,
-                  }}
-                >
-                  {canResend ? "Resend code" : `Resend in ${cooldown}s`}
-                </button>
-              </div>
-
-              {err && <ErrorMessage message={err} />}
-              {validationErrors.length > 0 && (
-                <ErrorBox>
-                  <ul>
-                    {validationErrors.map((msg, i) => (
-                      <li key={i}>{msg}</li>
-                    ))}
-                  </ul>
-                </ErrorBox>
-              )}
-
-              <button
-                type="submit"
-                className={styles.resetBtn}
-                disabled={loading || code.length !== 6}
-              >
-                {loading ? "Verifying..." : "Verify"}
+                {canResend ? "Resend code" : `Resend in ${cooldown}s`}
               </button>
-              <button
-                type="button"
-                className={styles.cancelBtn}
-                onClick={() => setStep("email")}
-              >
-                Back
-              </button>
-            </form>
-          )}
+            </div>
 
-          {step === "password" && (
-            <form className={styles.resetForm} onSubmit={handleComplete}>
-              <label htmlFor="rp-pass">New Password</label>
-              <div className={styles.inputWrap}>
-                <input
-                  id="rp-pass"
-                  ref={passInputRef}
-                  type="password"
-                  placeholder="••••••••"
-                  required
-                  // minLength={8}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
+            {err && <ErrorMessage message={err} />}
+            {validationErrors.length > 0 && (
+              <ErrorBox>
+                <ul>
+                  {validationErrors.map((msg, i) => (
+                    <li key={i}>{msg}</li>
+                  ))}
+                </ul>
+              </ErrorBox>
+            )}
 
-              <label htmlFor="rp-confirm">Confirm Password</label>
-              <div className={styles.inputWrap}>
-                <input
-                  id="rp-confirm"
-                  type="password"
-                  placeholder="••••••••"
-                  required
-                  // minLength={8}
-                  value={confirm}
-                  onChange={(e) => setConfirm(e.target.value)}
-                />
-              </div>
+            <button
+              type="submit"
+              className={styles.resetBtn}
+              disabled={loading || code.length !== 6}
+            >
+              {loading ? "Verifying..." : "Verify"}
+            </button>
+            <button
+              type="button"
+              className={styles.cancelBtn}
+              onClick={() => setStep("email")}
+            >
+              Back
+            </button>
+          </form>
+        )}
 
-              {err && <ErrorMessage message={err} />}
-              {validationErrors.length > 0 && (
-                <ErrorBox>
-                  <ul>
-                    {validationErrors.map((msg, i) => (
-                      <li key={i}>{msg}</li>
-                    ))}
-                  </ul>
-                </ErrorBox>
-              )}
-              <button
-                type="submit"
-                className={styles.resetBtn}
-                disabled={loading}
-              >
-                {loading ? "Saving..." : "Save new password"}
-              </button>
-              <button
-                type="button"
-                className={styles.cancelBtn}
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-            </form>
-          )}
+        {step === "password" && (
+          <form className={styles.resetForm} onSubmit={handleComplete}>
+            <label htmlFor="rp-pass">New Password</label>
+            <div className={styles.inputWrap}>
+              <input
+                id="rp-pass"
+                ref={passInputRef}
+                type="password"
+                placeholder="••••••••"
+                required
+                // minLength={8}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </div>
 
-          <button
-            type="button"
-            className={styles.closeContainer}
-            aria-label="Close reset password modal"
-            onClick={closeModal}
-          >
-            <FiX className={styles.XIcon} />
-          </button>
+            <label htmlFor="rp-confirm">Confirm Password</label>
+            <div className={styles.inputWrap}>
+              <input
+                id="rp-confirm"
+                type="password"
+                placeholder="••••••••"
+                required
+                // minLength={8}
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+              />
+            </div>
 
-          <p className={styles.safetyText}>
-            We’ll only use your email for password reset.
-          </p>
-        </div>
-      </div>
+            {err && <ErrorMessage message={err} />}
+            {validationErrors.length > 0 && (
+              <ErrorBox>
+                <ul>
+                  {validationErrors.map((msg, i) => (
+                    <li key={i}>{msg}</li>
+                  ))}
+                </ul>
+              </ErrorBox>
+            )}
+            <button
+              type="submit"
+              className={styles.resetBtn}
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Save new password"}
+            </button>
+            <button
+              type="button"
+              className={styles.cancelBtn}
+              onClick={() => {
+                navigate("..", { relative: "path", replace: true });
+              }}
+            >
+              Cancel
+            </button>
+          </form>
+        )}
+
+        <button
+          type="button"
+          className={styles.closeContainer}
+          aria-label="Close reset password modal"
+          onClick={() => {
+            navigate("..", { relative: "path", replace: true });
+          }}
+        >
+          <FiX className={styles.XIcon} />
+        </button>
+
+        <p className={styles.safetyText}>
+          We’ll only use your email for password reset.
+        </p>
+      </ModalLayout>
     </>
   );
 }

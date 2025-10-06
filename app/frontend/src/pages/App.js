@@ -9,9 +9,7 @@ import Signup from "./auth/Signup.js";
 import PrivateRoutes from "./app/PrivateRoute.js";
 import Dashboard from "./app/Dashboard.js";
 import RecipesPage from "./app/recipes/RecipesPage.js";
-import RecipeDetail, {
-  loader as RecipeByIdLoader,
-} from "./app/recipes/RecipeDetail.js";
+import { loader as RecipeByIdLoader } from "./app/recipes/RecipeDetail.js";
 import RecipeGenerator from "./app/generateRecipe/RecipeGenerator.js";
 import UploadImage from "./app/generateRecipe/create-options/UploadImage.js";
 import ManualEntry from "./app/generateRecipe/create-options/ManualEntry.js";
@@ -23,6 +21,8 @@ import EditRecipe from "./app/recipes/EditRecipe.js";
 import ErrorRecipePage from "./app/recipes/ErrorRecipePage.js";
 import ResetPasswordModal from "./auth/ResetPasswordModal.js";
 import LandingPage from "./auth/LandingPage.js";
+import RecipeDetailLayout from "./app/recipes/RecipeDetailLayout.js";
+import RecipeImageModal from "./app/recipes/RecipeImageModal.js";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +64,7 @@ const router = createBrowserRouter([
             path: ":id",
             id: "recipe",
             loader: RecipeByIdLoader,
+            errorElement: <ErrorRecipePage />,
             shouldRevalidate: ({
               currentParams,
               nextParams,
@@ -74,10 +75,15 @@ const router = createBrowserRouter([
               currentUrl.pathname !== nextUrl.pathname,
 
             children: [
-              { index: true, element: <RecipeDetail /> },
+              {
+                element: <RecipeDetailLayout />,
+                children: [
+                  { index: true, element: null },
+                  { path: "image", element: <RecipeImageModal /> },
+                ],
+              },
               { path: "edit", element: <EditRecipe /> },
             ],
-            errorElement: <ErrorRecipePage />,
           },
         ],
       },

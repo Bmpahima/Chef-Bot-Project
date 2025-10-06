@@ -94,7 +94,10 @@ export default function RecipeDetail() {
           <section className={styles.header}>
             <div className={styles.title}>
               <h1>{recipe.name}</h1>
-              <div className={styles.imgContainer}>
+              <div
+                className={styles.imgContainer}
+                onClick={() => navigate("image")}
+              >
                 {recipe ? (
                   <img src={`${recipe.imageUrl}`} alt={recipe.name} />
                 ) : (
