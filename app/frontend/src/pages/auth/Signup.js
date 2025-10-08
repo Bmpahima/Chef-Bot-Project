@@ -6,6 +6,7 @@ import styles from "./Signup.module.css";
 import { PROFILE_IMAGES } from "../../data/data.js";
 import ErrorBox from "../../components/UI/ErrorBox.js";
 import ErrorMessage from "../../components/UI/ErrorMessage.js";
+import { authAPI } from "../../http/api.js";
 
 const initialStateValue = {
   username: "",
@@ -56,8 +57,8 @@ export default function Signup() {
     }
 
     try {
-      await axios.post(
-        "http://localhost:8000/auth/signup",
+      await authAPI.post(
+        "/signup",
         { username, email, password, confirmPassword, imageUrl: profileImage },
         { headers: { "Content-Type": "application/json" } }
       );

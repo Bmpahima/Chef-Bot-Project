@@ -6,6 +6,7 @@ import styles from "./Login.module.css";
 import { useUser } from "../../store/userContext.js";
 import ErrorBox from "../../components/UI/ErrorBox.js";
 import ErrorMessage from "../../components/UI/ErrorMessage.js";
+import { authAPI } from "../../http/api.js";
 
 const initialStateValue = { email: "", password: "" };
 
@@ -30,8 +31,8 @@ export default function Login() {
     setValidationErrors([]);
     try {
       const { email, password } = formData;
-      const { data } = await axios.post(
-        `http://localhost:8000/auth/login`,
+      const { data } = await authAPI.post(
+        `/login`,
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );
