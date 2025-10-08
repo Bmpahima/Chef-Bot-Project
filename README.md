@@ -47,7 +47,7 @@ Core capabilities include JWT-based authentication, recipe CRUD, serving static 
 ### 📦 Prerequisites
 - Node.js & npm
   
-# ▶️ Run Backend (without Docker)
+## ▶️ Run Backend (without Docker)
 ```bash
 cd app/backend
 cp .env.example .env         # fill real values (no quotes)
@@ -56,7 +56,7 @@ npm start                    # or: npm run dev
 # → http://localhost:8000
 ```
 
-# ▶️ Run Frontend (without Docker)
+## ▶️ Run Frontend (without Docker)
 ```bash
 cd ../frontend
 cp .env.example .env         # set API base (e.g., http://localhost:8000)
@@ -66,7 +66,7 @@ npm run dev                  # e.g., http://localhost:5173 or 3000
 
 ---
 
-# 🐳 Run Backend (Docker)
+## 🐳 Run Backend (Docker)
 ```bash
 cd ../backend
 docker build -t chefbot-backend:latest .
@@ -82,7 +82,7 @@ docker run --name cb-frontend -d --env-file ./.env -it -p 3000:3000 chefbot-fron
 # → http://localhost:3000
 ```
 
-# 🧩 Run Both with Docker Compose (from project root)
+## 🧩 Run Both with Docker Compose (from project root)
 ```bash
 cd ..
 docker compose up -d --build
