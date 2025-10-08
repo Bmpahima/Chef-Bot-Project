@@ -8,7 +8,7 @@ Generate, manage, and share recipes powered by AI. Users can upload an ingredien
 
 ChefBot is a full-stack web application for intelligent recipe creation and management.
 
-- **Frontend:** React (SPA)
+- **Frontend:** React
 - **Backend:** Node.js + Express
 - **Database:** MongoDB Atlas (cloud)
 - **AI (optional):** OpenAI for generating recipes from images/ingredients/prompts
