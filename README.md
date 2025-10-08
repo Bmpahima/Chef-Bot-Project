@@ -42,41 +42,65 @@ Core capabilities include JWT-based authentication, recipe CRUD, serving static 
 - **DevOps:** Docker, Docker Compose
 
 ---
+## 🧪 How to Run
 
+### 📦 Prerequisites
+- Node.js & npm
+  
 # ▶️ Run Backend (without Docker)
+```bash
 cd app/backend
 cp .env.example .env         # fill real values (no quotes)
 npm install
 npm start                    # or: npm run dev
 # → http://localhost:8000
+```
 
 # ▶️ Run Frontend (without Docker)
+```bash
 cd ../frontend
 cp .env.example .env         # set API base (e.g., http://localhost:8000)
 npm install
 npm run dev                  # e.g., http://localhost:5173 or 3000
-# (Vite) prod-like preview:
-# npm run build && npm run preview
+```
 
 ---
 
 # 🐳 Run Backend (Docker)
+```bash
 cd ../backend
 docker build -t chefbot-backend:latest .
 docker run --name cb-backend -d --env-file ./.env -p 8000:8000 chefbot-backend
 # → http://localhost:8000
+```
 
 # 🐳 Run Frontend (Docker)
+```bash
 cd ../frontend
 docker build -t chefbot-frontend:latest .
 docker run --name cb-frontend -d --env-file ./.env -it -p 3000:3000 chefbot-frontend
 # → http://localhost:3000
+```
 
 # 🧩 Run Both with Docker Compose (from project root)
+```bash
 cd ..
 docker compose up -d --build
 # Frontend: http://localhost:3000
 # Backend:  http://localhost:8000
 # Stop:
 # docker compose down
+```
+
+## 📊 Tech Stack
+
+![React](https://img.shields.io/badge/React-20232a?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=ffffff)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=ffffff)
+![MongoDB%20Atlas](https://img.shields.io/badge/MongoDB%20Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=ffffff)
+![JWT](https://img.shields.io/badge/JSON%20Web%20Tokens-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=ffffff)
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=ffffff)
+![SendGrid](https://img.shields.io/badge/SendGrid-1A82E2?style=for-the-badge&logo=sendgrid&logoColor=ffffff)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=ffffff)
+![Docker%20Compose](https://img.shields.io/badge/Docker%20Compose-384d54?style=for-the-badge&logo=docker&logoColor=ffffff)
 
